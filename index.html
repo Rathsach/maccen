@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CINDY MAC — ART DIRECTOR</title>
+  <title>CINDY MAC — CREATIVE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -14,15 +17,12 @@
       --col-bg: #e8e8e8;
       --cell-bg: #fff;
       --tab-h: 34px;
-      --yellow: #f7d800;
-      --lime: #7ddb00;
-      --blue: #3b5bdb;
-      --orange: #ff6b35;
+      --blue: #2244ff;
       --link: #0000cc;
     }
 
     body {
-      font-family: 'Courier New', Courier, monospace;
+      font-family: 'Barlow', sans-serif;
       background: #d0d0d0;
       min-height: 100vh;
       display: flex;
@@ -42,13 +42,14 @@
       color: #333;
       user-select: none;
       flex-shrink: 0;
+      font-family: 'Courier New', monospace;
     }
     #name-box {
       border: 1px solid var(--border-dark);
       background: #fff;
       padding: 1px 6px;
       font-size: 11px;
-      font-family: inherit;
+      font-family: 'Courier New', monospace;
       width: 80px;
     }
     #formula-bar {
@@ -57,16 +58,17 @@
       background: #fff;
       padding: 1px 6px;
       font-size: 12px;
-      font-family: inherit;
+      font-family: 'Courier New', monospace;
       color: #333;
     }
 
-    /* ── STATUS NOTIFICATION BAR ── */
+    /* ── STATUS BAR ── */
     #status-bar {
       display: none;
       padding: 5px 10px 5px 56px;
       font-size: 12px;
-      font-weight: bold;
+      font-weight: 600;
+      font-family: 'Barlow', sans-serif;
       color: #000;
       border-bottom: 1px solid rgba(0,0,0,0.2);
       align-items: center;
@@ -77,15 +79,16 @@
     .status-chip {
       padding: 2px 8px;
       font-size: 11px;
-      font-weight: bold;
-      color: #000;
+      font-weight: 700;
+      font-family: 'Barlow Condensed', sans-serif;
+      letter-spacing: 1px;
     }
 
     /* ── SHEET ── */
     #sheet-wrapper { flex: 1; overflow: auto; }
     #sheet { min-width: 100%; }
 
-    /* ── COLUMN HEADERS (spells CINDYMAC) ── */
+    /* ── COLUMN HEADERS ── */
     #col-headers {
       display: flex;
       position: sticky;
@@ -96,7 +99,7 @@
     .row-num-spacer {
       width: 48px;
       min-width: 48px;
-      border-right: 1px solid rgba(0,0,0,0.15);
+      border-right: 1px solid var(--border);
       background: var(--col-bg);
     }
     .col-header {
@@ -104,15 +107,14 @@
       height: 26px;
       line-height: 26px;
       text-align: center;
-      font-size: 12px;
-      font-weight: 900;
-      border-right: 1px solid rgba(0,0,0,0.12);
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Courier New', monospace;
+      border-right: 1px solid var(--border);
       user-select: none;
-      letter-spacing: 1px;
-      color: #000;
+      background: var(--col-bg);
+      color: #555;
     }
-    .ch-y { background: var(--yellow); }
-    .ch-l { background: var(--lime); }
 
     /* ── ROWS ── */
     .row {
@@ -131,6 +133,7 @@
       border-right: 2px solid var(--border-dark);
       background: var(--col-bg);
       font-size: 11px;
+      font-family: 'Courier New', monospace;
       color: #666;
       text-align: center;
       line-height: var(--row-h);
@@ -154,27 +157,32 @@
     /* ── TEXT STYLES ── */
     .section-label {
       font-size: 10px;
-      color: #777;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 500;
+      color: #888;
       text-transform: uppercase;
       letter-spacing: 2px;
       display: block;
       padding: 5px 2px;
     }
     .hero-name {
-      font-size: clamp(32px, 6vw, 80px);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(36px, 6.5vw, 88px);
       font-weight: 900;
       line-height: 0.92;
       text-transform: uppercase;
-      letter-spacing: -2px;
-      color: #000;
+      letter-spacing: -1px;
+      color: #fff;
     }
     .body-text {
-      font-size: 12px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 13px;
       line-height: 1.7;
       color: #222;
       padding: 8px 6px;
     }
     .link-cell {
+      font-family: 'Barlow', sans-serif;
       color: var(--link);
       text-decoration: underline;
       cursor: pointer;
@@ -193,10 +201,10 @@
       transition: filter 0.15s;
       min-height: 200px;
     }
-    .proj-card:hover { filter: brightness(0.88); }
-    .pnum  { font-size: 10px; color: rgba(0,0,0,0.4); margin-bottom: 4px; }
-    .ptitle { font-size: clamp(11px, 1.4vw, 15px); font-weight: 900; text-transform: uppercase; line-height: 1.1; color: #000; }
-    .pcat  { font-size: 10px; color: rgba(0,0,0,0.5); margin-top: 3px; }
+    .proj-card:hover { filter: brightness(0.87); }
+    .pnum   { font-family: 'Barlow', sans-serif; font-size: 10px; color: rgba(0,0,0,0.4); margin-bottom: 4px; }
+    .ptitle { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(13px, 1.6vw, 17px); font-weight: 900; text-transform: uppercase; line-height: 1.1; color: #000; }
+    .pcat   { font-family: 'Barlow', sans-serif; font-size: 10px; color: rgba(0,0,0,0.5); margin-top: 3px; }
 
     /* ── PLACEHOLDERS ── */
     .ph {
@@ -204,6 +212,7 @@
       background: #ddd;
       display: flex; align-items: center; justify-content: center;
       flex-direction: column; gap: 8px;
+      font-family: 'Barlow', sans-serif;
       font-size: 10px; color: #aaa;
       text-transform: uppercase; letter-spacing: 1px;
     }
@@ -218,8 +227,13 @@
     }
 
     /* ── CONTACT ── */
-    .contact-item { display: flex; align-items: center; gap: 10px; padding: 5px 0; font-size: 12px; }
-    .contact-item .cl { font-size: 10px; color: #888; text-transform: uppercase; width: 72px; }
+    .contact-item { display: flex; align-items: center; gap: 10px; padding: 5px 0; font-size: 13px; }
+    .contact-item .cl {
+      font-family: 'Barlow', sans-serif;
+      font-size: 10px; color: #888;
+      text-transform: uppercase; letter-spacing: 1px;
+      width: 80px;
+    }
     .contact-item a { color: var(--link); text-decoration: underline; }
     .avail-dot { display: inline-block; width: 8px; height: 8px; background: #00cc44; border-radius: 50%; margin-right: 6px; }
 
@@ -237,20 +251,21 @@
     .tab {
       height: 28px; line-height: 28px;
       padding: 0 14px;
-      font-size: 11px; font-family: inherit; font-weight: bold;
+      font-size: 11px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
       border: 1px solid var(--border-dark); border-bottom: none;
       cursor: pointer; user-select: none; white-space: nowrap;
-      background: #b8b8b8; color: #444;
+      background: #b8b8b8; color: #555;
       transition: background 0.1s;
     }
-    .tab:hover { background: #c8c8c8; }
-    .tab.active { background: #fff; color: #000; border-top-width: 3px; }
-    #tab-home.active    { border-top-color: var(--yellow); }
-    #tab-work.active    { border-top-color: var(--lime); }
-    #tab-about.active   { border-top-color: var(--blue); }
-    #tab-contact.active { border-top-color: var(--orange); }
+    .tab:hover { background: #cacaca; }
+    .tab.active {
+      background: #fff; color: #000;
+      border-top: 2px solid #000;
+    }
     #tab-project        { display: none; }
-    #tab-project.active { display: block; border-top-color: #888; }
+    #tab-project.active { display: block; }
 
     /* ── SECTIONS ── */
     .sheet-section { display: none; }
@@ -271,29 +286,29 @@
 
 <!-- TOOLBAR -->
 <div id="toolbar">
-  <input id="name-box" value="C1" readonly />
+  <input id="name-box" value="A1" readonly />
   <span style="font-weight:bold;font-size:13px;color:#777;">fx</span>
-  <div id="formula-bar">=CINDY_MAC("ART DIRECTOR")</div>
+  <div id="formula-bar">=CINDY_MAC("CREATIVE")</div>
 </div>
 
-<!-- STATUS BAR (projekt-notifikation) -->
+<!-- STATUS BAR -->
 <div id="status-bar"></div>
 
 <!-- SHEET -->
 <div id="sheet-wrapper">
 <div id="sheet">
 
-  <!-- COLUMN HEADERS: C · I · N · D · Y · M · A · C -->
+  <!-- COLUMN HEADERS: A–H plain -->
   <div id="col-headers">
     <div class="row-num-spacer"></div>
-    <div class="col-header ch-y">C</div>
-    <div class="col-header ch-l">I</div>
-    <div class="col-header ch-y">N</div>
-    <div class="col-header ch-l">D</div>
-    <div class="col-header ch-y">Y</div>
-    <div class="col-header ch-l">M</div>
-    <div class="col-header ch-y">A</div>
-    <div class="col-header ch-l">C</div>
+    <div class="col-header">A</div>
+    <div class="col-header">B</div>
+    <div class="col-header">C</div>
+    <div class="col-header">D</div>
+    <div class="col-header">E</div>
+    <div class="col-header">F</div>
+    <div class="col-header">G</div>
+    <div class="col-header">H</div>
   </div>
 
   <!-- ═══════════ HOME ═══════════ -->
@@ -303,46 +318,45 @@
       <div class="row-num">1</div>
       <div class="cell"></div>
       <div class="cell link-cell" onclick="switchTab('work')">WORK</div>
-      <div class="cell link-cell" onclick="switchTab('about')">OM MIG</div>
-      <div class="cell link-cell" onclick="switchTab('contact')">KONTAKT</div>
+      <div class="cell link-cell" onclick="switchTab('about')">ABOUT</div>
+      <div class="cell link-cell" onclick="switchTab('contact')">CONTACT</div>
       <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
     </div>
 
     <div class="row"><div class="row-num">2</div><div class="cell s8"></div></div>
 
-    <!-- HERO: gul navneblok + lime billede + rolle -->
+    <!-- HERO: blue name + blue image area + role -->
     <div class="row hero">
       <div class="row-num">3</div>
-      <div class="cell s2" style="background:var(--yellow);padding:0;display:flex;align-items:center;justify-content:center;">
+      <div class="cell s2" style="background:var(--blue);padding:0;display:flex;align-items:center;justify-content:center;">
         <span class="hero-name" style="text-align:center;padding:16px;">CINDY<br>MAC</span>
       </div>
-      <div class="cell s3" style="background:var(--lime);padding:0;">
-        <div class="ph" style="background:var(--lime);color:rgba(0,0,0,0.25);">[ HERO IMAGE ]</div>
+      <div class="cell s3" style="background:#1a36dd;padding:0;">
+        <div class="ph" style="background:#1a36dd;color:rgba(255,255,255,0.2);">[ HERO IMAGE ]</div>
       </div>
-      <div class="cell s3" style="display:flex;flex-direction:column;justify-content:flex-end;padding:20px 14px;gap:12px;">
+      <div class="cell s3" style="display:flex;flex-direction:column;justify-content:flex-end;padding:20px 16px;gap:12px;">
         <div>
-          <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:2px;">Titel</div>
-          <div style="font-size:clamp(15px,2.2vw,24px);font-weight:900;text-transform:uppercase;">Art Director</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:10px;color:#999;text-transform:uppercase;letter-spacing:2px;">Title</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(16px,2.4vw,26px);font-weight:900;text-transform:uppercase;">Creative</div>
         </div>
         <div>
-          <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:2px;">Baseret i</div>
-          <div style="font-size:13px;">København, Danmark</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:10px;color:#999;text-transform:uppercase;letter-spacing:2px;">Based in</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:13px;">Copenhagen, Denmark</div>
         </div>
-        <div style="font-size:11px;color:#555;display:flex;align-items:center;gap:6px;">
-          <span class="avail-dot"></span>Tilgængelig for projekter
+        <div style="font-family:'Barlow',sans-serif;font-size:11px;color:#555;display:flex;align-items:center;gap:6px;">
+          <span class="avail-dot"></span>Available for projects
         </div>
       </div>
     </div>
 
     <div class="row"><div class="row-num">9</div><div class="cell s8"></div></div>
 
-    <!-- Section label -->
     <div class="row">
       <div class="row-num">10</div>
-      <div class="cell s8"><span class="section-label">UDVALGTE PROJEKTER — KLIK FOR AT SE MERE</span></div>
+      <div class="cell s8"><span class="section-label">Selected projects — click to explore</span></div>
     </div>
 
-    <!-- 5 PROJEKT CARDS -->
+    <!-- 5 PROJECT CARDS -->
     <div class="row xtall" id="home-cards"></div>
 
     <div class="row"><div class="row-num">12</div><div class="cell s8" style="background:#f5f5f5;"></div></div>
@@ -356,8 +370,8 @@
 
     <div class="row">
       <div class="row-num">1</div>
-      <div class="cell link-cell" onclick="switchTab('home')">← HJEM</div>
-      <div class="cell s7"><span class="section-label">ARBEJDE / CASES</span></div>
+      <div class="cell link-cell" onclick="switchTab('home')">← Home</div>
+      <div class="cell s7"><span class="section-label">Work / Cases</span></div>
     </div>
 
     <div class="row"><div class="row-num">2</div><div class="cell s8"></div></div>
@@ -373,30 +387,29 @@
 
     <div class="row">
       <div class="row-num">1</div>
-      <div class="cell link-cell" onclick="switchTab('home')">← HJEM</div>
-      <div class="cell s7"><span class="section-label">OM MIG</span></div>
+      <div class="cell link-cell" onclick="switchTab('home')">← Home</div>
+      <div class="cell s7"><span class="section-label">About</span></div>
     </div>
 
     <div class="row"><div class="row-num">2</div><div class="cell s8"></div></div>
 
-    <!-- portræt + navn -->
     <div class="row tall">
       <div class="row-num">3</div>
       <div class="cell s3" style="padding:0;">
-        <div class="ph" style="min-height:200px;">[ PORTRÆT ]</div>
+        <div class="ph" style="min-height:200px;">[ Portrait ]</div>
       </div>
       <div class="cell s5" style="display:flex;flex-direction:column;justify-content:center;padding:24px 18px;gap:14px;">
         <div>
-          <div style="font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;">Navn</div>
-          <div style="font-size:clamp(26px,4.5vw,52px);font-weight:900;text-transform:uppercase;line-height:1;">CINDY MAC</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;">Name</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,4.5vw,56px);font-weight:900;text-transform:uppercase;line-height:1;">CINDY MAC</div>
         </div>
         <div>
-          <div style="font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;">Titel</div>
-          <div style="font-size:16px;font-weight:bold;text-transform:uppercase;">Art Director</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;">Title</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;">Creative</div>
         </div>
         <div>
-          <div style="font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;">Baseret i</div>
-          <div style="font-size:13px;">København, Danmark</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;">Based in</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:13px;">Copenhagen, Denmark</div>
         </div>
       </div>
     </div>
@@ -405,9 +418,9 @@
 
     <div class="row">
       <div class="row-num">5</div>
-      <div class="cell s2" style="background:#f9f9f9;"><span class="section-label">BIOGRAFI</span></div>
+      <div class="cell s2" style="background:#f9f9f9;"><span class="section-label">Biography</span></div>
       <div class="cell s6">
-        <div class="body-text">[Skriv din biografi her. Fortæl om din baggrund, hvad der driver dig, og hvad du bringer til bordet som art director. Hold det råt og autentisk.]</div>
+        <div class="body-text">[Write your biography here. Talk about your background, what drives you, and what you bring to the table as a creative. Keep it raw and authentic.]</div>
       </div>
     </div>
 
@@ -415,7 +428,7 @@
 
     <div class="row">
       <div class="row-num">7</div>
-      <div class="cell s2" style="background:#f9f9f9;"><span class="section-label">KOMPETENCER</span></div>
+      <div class="cell s2" style="background:#f9f9f9;"><span class="section-label">Skills</span></div>
       <div class="cell s2"><div class="body-text">Art Direction<br>Brand Identity<br>Campaign Dev.<br>Typography</div></div>
       <div class="cell s2"><div class="body-text">Editorial Design<br>Visual Storytelling<br>Creative Strategy<br>Photo Direction</div></div>
       <div class="cell s2"><div class="body-text">Adobe Suite<br>Figma<br>Print Production<br>Client Management</div></div>
@@ -425,8 +438,8 @@
 
     <div class="row">
       <div class="row-num">9</div>
-      <div class="cell s2" style="background:#f9f9f9;"><span class="section-label">KLIENTER</span></div>
-      <div class="cell s6"><div class="body-text">[Klient 1] &nbsp; [Klient 2] &nbsp; [Klient 3] &nbsp; [Klient 4] &nbsp; [Klient 5]</div></div>
+      <div class="cell s2" style="background:#f9f9f9;"><span class="section-label">Selected Clients</span></div>
+      <div class="cell s6"><div class="body-text">[Client 1] &nbsp; [Client 2] &nbsp; [Client 3] &nbsp; [Client 4] &nbsp; [Client 5]</div></div>
     </div>
 
     <div class="row"><div class="row-num">10</div><div class="cell s8"></div></div>
@@ -439,8 +452,8 @@
 
     <div class="row">
       <div class="row-num">1</div>
-      <div class="cell link-cell" onclick="switchTab('home')">← HJEM</div>
-      <div class="cell s7"><span class="section-label">KONTAKT</span></div>
+      <div class="cell link-cell" onclick="switchTab('home')">← Home</div>
+      <div class="cell s7"><span class="section-label">Contact</span></div>
     </div>
 
     <div class="row"><div class="row-num">2</div><div class="cell s8"></div></div>
@@ -448,26 +461,26 @@
     <div class="row tall">
       <div class="row-num">3</div>
       <div class="cell s5" style="display:flex;align-items:center;padding:24px 20px;">
-        <span style="font-size:clamp(24px,4.5vw,60px);font-weight:900;text-transform:uppercase;line-height:1.05;letter-spacing:-1px;">
-          LAD OS<br>TALE<br>SAMMEN.
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(26px,5vw,64px);font-weight:900;text-transform:uppercase;line-height:1.0;letter-spacing:-1px;">
+          LET'S WORK<br>TOGETHER.
         </span>
       </div>
       <div class="cell s3" style="display:flex;flex-direction:column;justify-content:center;padding:20px 16px;gap:14px;">
         <div class="contact-item">
-          <span class="cl">EMAIL</span>
-          <a href="mailto:hej@cindymac.dk">hej@cindymac.dk</a>
+          <span class="cl">Email</span>
+          <a href="mailto:hello@cindymac.dk">hello@cindymac.dk</a>
         </div>
         <div class="contact-item">
-          <span class="cl">INSTAGRAM</span>
+          <span class="cl">Instagram</span>
           <a href="#" target="_blank">@cindymac</a>
         </div>
         <div class="contact-item">
-          <span class="cl">LINKEDIN</span>
+          <span class="cl">LinkedIn</span>
           <a href="#" target="_blank">linkedin.com/in/cindymac</a>
         </div>
         <div class="contact-item">
-          <span class="cl">LOKATION</span>
-          <span>København, DK</span>
+          <span class="cl">Location</span>
+          <span>Copenhagen, DK</span>
         </div>
       </div>
     </div>
@@ -476,9 +489,9 @@
 
     <div class="row">
       <div class="row-num">5</div>
-      <div class="cell s2" style="background:#f9f9f9;"><span class="section-label">TILGÆNGELIGHED</span></div>
+      <div class="cell s2" style="background:#f9f9f9;"><span class="section-label">Availability</span></div>
       <div class="cell s6">
-        <div class="body-text"><span class="avail-dot"></span>Tilgængelig for nye projekter og samarbejder — skriv endelig.</div>
+        <div class="body-text"><span class="avail-dot"></span>Available for new projects and collaborations — feel free to reach out.</div>
       </div>
     </div>
 
@@ -498,9 +511,9 @@
 <!-- TAB BAR -->
 <div id="tab-bar">
   <div class="tab active" id="tab-home"    onclick="switchTab('home')">Home</div>
-  <div class="tab"        id="tab-work"    onclick="switchTab('work')">Arbejde</div>
-  <div class="tab"        id="tab-about"   onclick="switchTab('about')">Om mig</div>
-  <div class="tab"        id="tab-contact" onclick="switchTab('contact')">Kontakt</div>
+  <div class="tab"        id="tab-work"    onclick="switchTab('work')">Work</div>
+  <div class="tab"        id="tab-about"   onclick="switchTab('about')">About</div>
+  <div class="tab"        id="tab-contact" onclick="switchTab('contact')">Contact</div>
   <div class="tab"        id="tab-project">—</div>
 </div>
 
@@ -511,49 +524,52 @@ const PROJECTS = [
     id: 1, num: '01',
     title: 'Project Alpha', cat: 'Brand Identity', year: '2024',
     tags: ['Print', 'Digital', 'Guidelines'],
-    color: '#f7d800',
-    desc: '[Beskriv idéen bag Project Alpha. Hvad var briefet? Hvad var din tilgang og dit udgangspunkt? Hvad vil du have seeren til at føle? Hold det råt og direkte — som dit arbejde.]',
+    color: '#f7e000',
+    desc: '[Describe the idea behind Project Alpha. What was the brief? What was your approach and starting point? What do you want the viewer to feel? Keep it raw and direct — like your work.]',
     images: 3, video: true
   },
   {
     id: 2, num: '02',
     title: 'Project Beta', cat: 'Campaign', year: '2024',
     tags: ['Social Media', 'OOH', '360°'],
-    color: '#7ddb00',
-    desc: '[Beskriv idéen bag Project Beta. Hvad var briefet? Hvad var din tilgang? Hvad skaber projektet?]',
+    color: '#ff22aa',
+    desc: '[Describe the idea behind Project Beta. What was the brief? What was your approach? What does the project create?]',
     images: 2, video: true
   },
   {
     id: 3, num: '03',
     title: 'Project Gamma', cat: 'Editorial', year: '2023',
     tags: ['Photography', 'Styling', 'Art Direction'],
-    color: '#d4e4ff',
-    desc: '[Beskriv idéen bag Project Gamma. Hvad var briefet? Hvad var din tilgang?]',
+    color: '#ff6600',
+    desc: '[Describe the idea behind Project Gamma. What was the brief? What was your approach?]',
     images: 4, video: false
   },
   {
     id: 4, num: '04',
     title: 'Project Delta', cat: 'Motion', year: '2023',
     tags: ['Animation', 'Video', 'Post-production'],
-    color: '#ffe8d4',
-    desc: '[Beskriv idéen bag Project Delta. Hvad var briefet? Hvad var din tilgang?]',
+    color: '#22ee55',
+    desc: '[Describe the idea behind Project Delta. What was the brief? What was your approach?]',
     images: 2, video: true
   },
   {
     id: 5, num: '05',
     title: 'Project Epsilon', cat: 'Installation', year: '2022',
     tags: ['Spatial Design', 'Exhibition', 'Concept'],
-    color: '#e0e0e0',
-    desc: '[Beskriv idéen bag Project Epsilon. Hvad var briefet? Hvad var din tilgang?]',
+    color: '#9933ff',
+    desc: '[Describe the idea behind Project Epsilon. What was the brief? What was your approach?]',
     images: 3, video: false
   },
 ];
 
+/* purple needs white text; others are light enough for black */
+const lightText = id => [5].includes(id) ? '#fff' : '#000';
+
 const FORMULAE = {
-  home:    '=CINDY_MAC("ART DIRECTOR")',
-  work:    '=FILTER(projekter, kategori="ALL")',
-  about:   '=VLOOKUP("CINDY_MAC", profil, 2, FALSE)',
-  contact: '=MAILTO("hej@cindymac.dk")',
+  home:    '=CINDY_MAC("CREATIVE")',
+  work:    '=FILTER(projects, category="ALL")',
+  about:   '=VLOOKUP("CINDY_MAC", profile, 2, FALSE)',
+  contact: '=MAILTO("hello@cindymac.dk")',
 };
 
 const ALL_TABS = ['home','work','about','contact','project'];
@@ -569,8 +585,8 @@ function switchTab(name) {
   document.getElementById('formula-bar').textContent = FORMULAE[name] || '=...';
   document.getElementById('sheet-wrapper').scrollTop = 0;
 
-  const projTab = document.getElementById('tab-project');
-  projTab.style.display = (name === 'project') ? 'block' : 'none';
+  document.getElementById('tab-project').style.display =
+    (name === 'project') ? 'block' : 'none';
 
   if (name !== 'project') {
     document.getElementById('status-bar').classList.remove('visible');
@@ -582,13 +598,14 @@ function openProject(id) {
   const p = PROJECTS.find(x => x.id === id);
   if (!p) return;
 
-  const tagsHtml = p.tags
-    .map(t => `<span class="status-chip" style="background:${p.color};">${t}</span>`)
-    .join('');
+  const tc = lightText(id);
+  const tagsHtml = p.tags.map(t =>
+    `<span class="status-chip" style="background:${p.color};color:${tc};">${t}</span>`
+  ).join('');
 
   let imgHtml = '';
   for (let i = 1; i <= p.images; i++) {
-    imgHtml += `<div class="cell" style="padding:0;"><div class="ph dark" style="min-height:220px;">[ BILLEDE ${i} ]</div></div>`;
+    imgHtml += `<div class="cell" style="padding:0;"><div class="ph dark" style="min-height:220px;">[ Image ${i} ]</div></div>`;
   }
 
   const videoHtml = p.video ? `
@@ -599,7 +616,7 @@ function openProject(id) {
       <div class="cell s6" style="padding:0;">
         <div class="ph vid" style="min-height:300px;">
           <div class="play-btn">▶</div>
-          <span>[ VIDEO — indsæt YouTube / Vimeo URL ]</span>
+          <span>[ Video — paste YouTube / Vimeo URL ]</span>
         </div>
       </div>
       <div class="cell" style="background:#f5f5f5;"></div>
@@ -608,15 +625,15 @@ function openProject(id) {
   document.getElementById('project-content').innerHTML = `
     <div class="row">
       <div class="row-num">1</div>
-      <div class="cell link-cell" onclick="switchTab('work')">← ALLE PROJEKTER</div>
+      <div class="cell link-cell" onclick="switchTab('work')">← All Projects</div>
       <div class="cell s7"><span class="section-label">${p.num} / ${p.cat.toUpperCase()} · ${p.year}</span></div>
     </div>
 
     <div class="row tall" style="min-height:160px;">
       <div class="row-num">2</div>
       <div class="cell s8" style="background:${p.color};display:flex;flex-direction:column;justify-content:center;padding:24px 28px;gap:12px;">
-        <div style="font-size:10px;color:rgba(0,0,0,0.45);letter-spacing:2px;text-transform:uppercase;">${p.year} · ${p.cat}</div>
-        <div style="font-size:clamp(30px,5.5vw,70px);font-weight:900;text-transform:uppercase;line-height:0.93;letter-spacing:-2px;">${p.title}</div>
+        <div style="font-family:'Barlow',sans-serif;font-size:10px;color:${tc === '#fff' ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.4)'};letter-spacing:2px;text-transform:uppercase;">${p.year} · ${p.cat}</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(32px,5.5vw,72px);font-weight:900;text-transform:uppercase;line-height:0.93;letter-spacing:-2px;color:${tc};">${p.title}</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">${tagsHtml}</div>
       </div>
     </div>
@@ -624,15 +641,15 @@ function openProject(id) {
     <div class="row" style="min-height:340px;">
       <div class="row-num">3</div>
       <div class="cell s8" style="padding:0;">
-        <div class="ph dark" style="min-height:340px;">[ PRIMÆRT BILLEDE ]</div>
+        <div class="ph dark" style="min-height:340px;">[ Primary Image ]</div>
       </div>
     </div>
 
     <div class="row">
       <div class="row-num">4</div>
-      <div class="cell s2" style="background:#f5f5f5;"><span class="section-label">IDÉEN</span></div>
+      <div class="cell s2" style="background:#f5f5f5;"><span class="section-label">The Idea</span></div>
       <div class="cell s6">
-        <div class="body-text" style="max-width:680px;font-size:13px;line-height:1.8;">${p.desc}</div>
+        <div class="body-text" style="max-width:680px;font-size:13px;line-height:1.85;">${p.desc}</div>
       </div>
     </div>
 
@@ -649,27 +666,24 @@ function openProject(id) {
     <div class="row">
       <div class="row-num">10</div>
       <div class="cell s4" style="display:flex;align-items:center;padding:8px 10px;">
-        <span class="link-cell" onclick="switchTab('work')" style="font-size:11px;">← TILBAGE TIL ALLE PROJEKTER</span>
+        <span class="link-cell" onclick="switchTab('work')" style="font-size:11px;">← Back to all projects</span>
       </div>
       <div class="cell s4" style="display:flex;align-items:center;justify-content:flex-end;padding:8px 10px;" id="proj-next-btn"></div>
     </div>
     <div class="row"><div class="row-num">11</div><div class="cell s8" style="background:#ececec;"></div></div>
   `;
 
-  // next project button
   const nextProj = PROJECTS.find(x => x.id === id + 1);
   if (nextProj) {
     document.getElementById('proj-next-btn').innerHTML =
-      `<span class="link-cell" onclick="openProject(${nextProj.id})" style="font-size:11px;">NÆSTE: ${nextProj.num} ${nextProj.title} →</span>`;
+      `<span class="link-cell" onclick="openProject(${nextProj.id})" style="font-size:11px;">Next: ${nextProj.num} ${nextProj.title} →</span>`;
   }
 
-  // update tab label + formula
   document.getElementById('tab-project').textContent = p.num + ' ' + p.title;
   FORMULAE['project'] = `=GET_PROJECT("${p.title}", ${p.year})`;
 
-  // status notification bar
   const sb = document.getElementById('status-bar');
-  sb.innerHTML = `<span class="status-chip" style="background:${p.color};">${p.num}</span> Viser: <strong>${p.title}</strong> — ${p.cat} · ${p.year}`;
+  sb.innerHTML = `<span class="status-chip" style="background:${p.color};color:${tc};">${p.num}</span> Viewing: <strong>${p.title}</strong> — ${p.cat} · ${p.year}`;
   sb.classList.add('visible');
 
   switchTab('project');
@@ -680,24 +694,23 @@ function buildHomeCards() {
   const row = document.getElementById('home-cards');
   row.innerHTML = '<div class="row-num">11</div>';
   PROJECTS.forEach(p => {
+    const tc = lightText(p.id);
     const cell = document.createElement('div');
     cell.className = 'cell';
-    cell.style.padding = '0';
-    cell.style.background = p.color;
+    cell.style.cssText = `padding:0;background:${p.color};`;
     cell.onclick = () => openProject(p.id);
     cell.innerHTML = `
       <div class="proj-card">
-        <div class="pnum">${p.num}</div>
-        <div class="ptitle">${p.title}</div>
-        <div class="pcat">${p.cat} · ${p.year}</div>
+        <div class="pnum" style="color:${tc === '#fff' ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)'};">${p.num}</div>
+        <div class="ptitle" style="color:${tc};">${p.title}</div>
+        <div class="pcat" style="color:${tc === '#fff' ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'};">${p.cat} · ${p.year}</div>
       </div>`;
     row.appendChild(cell);
   });
-  // "se alt" cell
   const last = document.createElement('div');
   last.className = 'cell s3';
   last.style.cssText = 'background:#f0f0f0;display:flex;align-items:flex-end;padding:12px;';
-  last.innerHTML = `<span class="link-cell" onclick="switchTab('work')" style="font-size:11px;">SE ALT ARBEJDE →</span>`;
+  last.innerHTML = `<span class="link-cell" onclick="switchTab('work')" style="font-size:11px;">View all work →</span>`;
   row.appendChild(last);
 }
 
@@ -708,14 +721,18 @@ function buildWorkSection() {
   PROJECTS.forEach((p, i) => {
     const rn = 3 + i * 2;
     const flip = i % 2 === 1;
-    const imgCell = `<div class="cell s4" style="padding:0;background:${p.color};cursor:pointer;" onclick="openProject(${p.id})"><div class="ph" style="background:${p.color};color:rgba(0,0,0,0.25);min-height:260px;">[ BILLEDE ${p.num} ]</div></div>`;
+    const tc = lightText(p.id);
+    const imgCell = `
+      <div class="cell s4" style="padding:0;background:${p.color};cursor:pointer;" onclick="openProject(${p.id})">
+        <div class="ph" style="background:${p.color};color:${tc === '#fff' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'};min-height:260px;">[ Image ${p.num} ]</div>
+      </div>`;
     const textCell = `
       <div class="cell s4" style="display:flex;flex-direction:column;justify-content:center;padding:22px 18px;gap:10px;cursor:pointer;" onclick="openProject(${p.id})">
-        <div style="font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;">${p.num} / ${p.cat.toUpperCase()}</div>
-        <div style="font-size:clamp(20px,3.2vw,40px);font-weight:900;text-transform:uppercase;line-height:1;">${p.title}</div>
-        <div style="font-size:11px;color:#555;line-height:1.65;">${p.desc.substring(0, 90)}...</div>
-        <div style="font-size:10px;color:#999;">${p.year} · ${p.tags.join(' · ')}</div>
-        <span class="link-cell" style="font-size:11px;margin-top:2px;">SE PROJEKT →</span>
+        <div style="font-family:'Barlow',sans-serif;font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;">${p.num} / ${p.cat.toUpperCase()}</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(22px,3.2vw,42px);font-weight:900;text-transform:uppercase;line-height:1;">${p.title}</div>
+        <div style="font-family:'Barlow',sans-serif;font-size:12px;color:#555;line-height:1.65;">${p.desc.substring(0, 90)}...</div>
+        <div style="font-family:'Barlow',sans-serif;font-size:10px;color:#999;">${p.year} · ${p.tags.join(' · ')}</div>
+        <span class="link-cell" style="font-size:11px;margin-top:2px;">View project →</span>
       </div>`;
     html += `
       <div class="row" style="min-height:260px;">
@@ -740,10 +757,10 @@ document.addEventListener('click', e => {
   if (!row) return;
   const rn = row.querySelector('.row-num');
   const r = rn ? rn.textContent.trim() : '?';
-  const cols = 'CINDYMAC';
+  const cols = 'ABCDEFGH';
   const cells = Array.from(row.querySelectorAll(':scope > .cell'));
   const idx = cells.indexOf(cell);
-  const c = idx >= 0 ? (cols[idx] || 'C') : 'C';
+  const c = idx >= 0 ? (cols[idx] || 'A') : 'A';
   document.getElementById('name-box').value = c + r;
 });
 </script>
