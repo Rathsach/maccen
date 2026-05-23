@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CINDY MAC — ART DIRECTOR</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --border: #c0c0c0;
+      --border-dark: #999;
+      --row-h: 24px;
+      --col-header-bg: #e8e8e8;
+      --cell-bg: #fff;
+      --tab-h: 32px;
+      --accent: #000;
+      --link: #0000cc;
+    }
+
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background: #d0d0d0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* ── TOP TOOLBAR ── */
+    #toolbar {
+      background: #f0f0f0;
+      border-bottom: 1px solid var(--border-dark);
+      padding: 4px 8px;
+      font-size: 11px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      color: #333;
+      user-select: none;
+    }
+    #toolbar span { cursor: default; }
+    #toolbar span:hover { background: #ddd; padding: 1px 4px; }
+    #name-box {
+      border: 1px solid var(--border-dark);
+      background: #fff;
+      padding: 1px 6px;
+      font-size: 11px;
+      font-family: inherit;
+      width: 80px;
+      color: #000;
+    }
+    #formula-bar {
+      flex: 1;
+      border: 1px solid var(--border-dark);
+      background: #fff;
+      padding: 1px 6px;
+      font-size: 12px;
+      font-family: inherit;
+      color: #333;
+      cursor: default;
+    }
+
+    /* ── SPREADSHEET CONTAINER ── */
+    #sheet-wrapper {
+      flex: 1;
+      overflow: auto;
+      position: relative;
+    }
+
+    #sheet {
+      position: relative;
+      min-width: 100%;
+    }
+
+    /* ── COLUMN HEADERS ── */
+    #col-headers {
+      display: flex;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--col-header-bg);
+      border-bottom: 2px solid var(--border-dark);
+    }
+
+    .row-num-spacer {
+      width: 48px;
+      min-width: 48px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-dark);
+      background: var(--col-header-bg);
+    }
+
+    .col-header {
+      flex: 1;
+      height: var(--row-h);
+      line-height: var(--row-h);
+      text-align: center;
+      font-size: 11px;
+      font-weight: bold;
+      color: #333;
+      border-right: 1px solid var(--border);
+      user-select: none;
+      cursor: default;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── ROWS ── */
+    .row {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      min-height: var(--row-h);
+    }
+    .row.tall { min-height: 160px; }
+    .row.xtall { min-height: 320px; }
+    .row.hero-row { min-height: 420px; }
+
+    .row-num {
+      width: 48px;
+      min-width: 48px;
+      border-right: 2px solid var(--border-dark);
+      background: var(--col-header-bg);
+      font-size: 11px;
+      color: #555;
+      text-align: center;
+      line-height: var(--row-h);
+      padding-top: 4px;
+      user-select: none;
+      cursor: default;
+    }
+
+    .cell {
+      flex: 1;
+      border-right: 1px solid var(--border);
+      background: var(--cell-bg);
+      padding: 3px 5px;
+      font-size: 12px;
+      color: #111;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cell.selected {
+      outline: 2px solid #1a6fbf;
+      outline-offset: -2px;
+      z-index: 2;
+    }
+
+    .cell.span2 { flex: 2; }
+    .cell.span3 { flex: 3; }
+    .cell.span4 { flex: 4; }
+    .cell.span5 { flex: 5; }
+    .cell.span6 { flex: 6; }
+    .cell.span8 { flex: 8; }
+
+    /* ── CONTENT STYLES ── */
+    .cell-label {
+      font-size: 10px;
+      color: #888;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .hero-text {
+      font-size: clamp(28px, 5vw, 64px);
+      font-weight: 900;
+      line-height: 1;
+      color: #000;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+      padding: 20px 16px;
+      display: block;
+    }
+
+    .hero-text.inverted {
+      background: #000;
+      color: #fff;
+      display: block;
+      height: 100%;
+      padding: 20px 16px;
+    }
+
+    .section-header {
+      font-size: 10px;
+      font-weight: bold;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 6px 5px 2px;
+    }
+
+    .big-label {
+      font-size: clamp(14px, 2.5vw, 22px);
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #000;
+      padding: 8px 5px;
+    }
+
+    .body-text {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #222;
+      padding: 8px 5px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .link-cell {
+      color: var(--link);
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .link-cell:hover { color: #0000aa; }
+
+    /* project card */
+    .project-card {
+      padding: 10px 8px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      cursor: pointer;
+      background: #f5f5f5;
+      transition: background 0.15s;
+    }
+    .project-card:hover { background: #eee; }
+    .project-card .proj-num {
+      font-size: 10px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+    .project-card .proj-title {
+      font-size: clamp(13px, 1.8vw, 18px);
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #000;
+      line-height: 1.2;
+    }
+    .project-card .proj-sub {
+      font-size: 11px;
+      color: #666;
+      margin-top: 3px;
+    }
+
+    /* image placeholder */
+    .img-placeholder {
+      width: 100%;
+      height: 100%;
+      background: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      min-height: 200px;
+    }
+    .img-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* formula bar activity */
+    .cell:hover ~ #formula-bar { content: 'hover'; }
+
+    /* striped empty rows */
+    .row.empty .cell { background: #fafafa; }
+    .row.empty:nth-child(even) .cell { background: #f5f5f5; }
+
+    /* ── CONTACT ── */
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+      font-size: 12px;
+    }
+    .contact-item .c-label {
+      color: #888;
+      width: 60px;
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+    .contact-item a {
+      color: var(--link);
+      text-decoration: underline;
+    }
+
+    /* ── BOTTOM TABS ── */
+    #tab-bar {
+      position: sticky;
+      bottom: 0;
+      background: #e0e0e0;
+      border-top: 2px solid var(--border-dark);
+      display: flex;
+      align-items: flex-end;
+      height: var(--tab-h);
+      gap: 2px;
+      padding: 0 8px;
+      z-index: 10;
+      overflow-x: auto;
+    }
+
+    .tab {
+      height: 28px;
+      line-height: 28px;
+      padding: 0 16px;
+      font-size: 11px;
+      font-family: inherit;
+      border: 1px solid var(--border-dark);
+      border-bottom: none;
+      background: #c8c8c8;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      color: #333;
+      transition: background 0.1s;
+    }
+    .tab:hover { background: #d8d8d8; }
+    .tab.active {
+      background: #fff;
+      border-top: 2px solid #1a6fbf;
+      color: #000;
+      font-weight: bold;
+    }
+
+    /* ── SECTION SHOW/HIDE ── */
+    .sheet-section { display: none; }
+    .sheet-section.visible { display: block; }
+
+    /* ── SCROLLBAR STYLING ── */
+    ::-webkit-scrollbar { width: 12px; height: 12px; }
+    ::-webkit-scrollbar-track { background: #e0e0e0; }
+    ::-webkit-scrollbar-thumb { background: #aaa; border: 2px solid #e0e0e0; }
+    ::-webkit-scrollbar-thumb:hover { background: #888; }
+
+    /* ── SELECTION highlight ── */
+    .cell.active-cell {
+      outline: 2px solid #1a6fbf;
+      outline-offset: -2px;
+    }
+
+    @media (max-width: 640px) {
+      .col-header, .cell { font-size: 10px; }
+      .hero-text { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOOLBAR -->
+<div id="toolbar">
+  <input id="name-box" value="A1" readonly />
+  <span style="font-weight:bold;font-size:13px;">fx</span>
+  <div id="formula-bar">=CINDY_MAC("ART DIRECTOR")</div>
+</div>
+
+<!-- SPREADSHEET -->
+<div id="sheet-wrapper">
+<div id="sheet">
+
+  <!-- COLUMN HEADERS -->
+  <div id="col-headers">
+    <div class="row-num-spacer"></div>
+    <div class="col-header">A</div>
+    <div class="col-header">B</div>
+    <div class="col-header">C</div>
+    <div class="col-header">D</div>
+    <div class="col-header">E</div>
+    <div class="col-header">F</div>
+    <div class="col-header">G</div>
+    <div class="col-header">H</div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SECTION: HOME
+  ══════════════════════════════════ -->
+  <div id="sec-home" class="sheet-section visible">
+
+    <!-- Row 1: nav links -->
+    <div class="row">
+      <div class="row-num">1</div>
+      <div class="cell"></div>
+      <div class="cell link-cell" onclick="switchTab('work')">WORK</div>
+      <div class="cell link-cell" onclick="switchTab('about')">OM MIG</div>
+      <div class="cell link-cell" onclick="switchTab('contact')">KONTAKT</div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+    </div>
+
+    <!-- Row 2 empty -->
+    <div class="row empty">
+      <div class="row-num">2</div>
+      <div class="cell span8"></div>
+    </div>
+
+    <!-- Row 3-10: HERO -->
+    <div class="row hero-row">
+      <div class="row-num">3</div>
+      <!-- inverted name block -->
+      <div class="cell span3" style="padding:0;">
+        <span class="hero-text inverted">CINDY<br>MAC</span>
+      </div>
+      <!-- image placeholder -->
+      <div class="cell span3" style="padding:0;">
+        <div class="img-placeholder">[ HERO IMAGE ]</div>
+      </div>
+      <!-- role -->
+      <div class="cell span2" style="display:flex;flex-direction:column;justify-content:flex-end;padding:12px 10px;">
+        <span style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:2px;">Role</span>
+        <span style="font-size:clamp(14px,2vw,20px);font-weight:bold;text-transform:uppercase;margin-top:4px;">Art Director</span>
+        <span style="font-size:11px;color:#666;margin-top:6px;">Copenhagen · Available for projects</span>
+      </div>
+    </div>
+
+    <!-- Row 11 empty -->
+    <div class="row empty">
+      <div class="row-num">11</div>
+      <div class="cell span8"></div>
+    </div>
+
+    <!-- Row 12: section label -->
+    <div class="row">
+      <div class="row-num">12</div>
+      <div class="cell span8">
+        <span class="section-header">SELECTED WORK</span>
+      </div>
+    </div>
+
+    <!-- Row 13-20: project cards -->
+    <div class="row tall">
+      <div class="row-num">13</div>
+      <div class="cell span2" style="padding:0;">
+        <div class="project-card" onclick="switchTab('work')">
+          <div class="proj-num">01</div>
+          <div class="proj-title">Project Alpha</div>
+          <div class="proj-sub">Brand Identity · 2024</div>
+        </div>
+      </div>
+      <div class="cell span2" style="padding:0;">
+        <div class="project-card" onclick="switchTab('work')">
+          <div class="proj-num">02</div>
+          <div class="proj-title">Project Beta</div>
+          <div class="proj-sub">Campaign · 2024</div>
+        </div>
+      </div>
+      <div class="cell span2" style="padding:0;">
+        <div class="project-card" onclick="switchTab('work')">
+          <div class="proj-num">03</div>
+          <div class="proj-title">Project Gamma</div>
+          <div class="proj-sub">Art Direction · 2023</div>
+        </div>
+      </div>
+      <div class="cell span2" style="padding:0;background:#f0f0f0;">
+        <div style="height:100%;display:flex;align-items:center;justify-content:center;">
+          <span class="link-cell" onclick="switchTab('work')" style="font-size:11px;">SE ALT ARBEJDE →</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 21 empty -->
+    <div class="row empty">
+      <div class="row-num">21</div>
+      <div class="cell span8"></div>
+    </div>
+
+    <!-- Row 22: statement -->
+    <div class="row tall">
+      <div class="row-num">22</div>
+      <div class="cell" style="background:#000;"></div>
+      <div class="cell span6" style="display:flex;align-items:center;padding:20px;">
+        <span style="font-size:clamp(16px,2.5vw,28px);font-weight:900;text-transform:uppercase;line-height:1.2;letter-spacing:-0.5px;">
+          "Design er ikke<br>hvad det ser ud som —<br>det er hvad det gør."
+        </span>
+      </div>
+      <div class="cell" style="background:#000;"></div>
+    </div>
+
+    <!-- rows 23-25 empty -->
+    <div class="row empty"><div class="row-num">23</div><div class="cell span8"></div></div>
+    <div class="row empty"><div class="row-num">24</div><div class="cell span8"></div></div>
+    <div class="row empty"><div class="row-num">25</div><div class="cell span8"></div></div>
+
+  </div><!-- /sec-home -->
+
+
+  <!-- ══════════════════════════════════
+       SECTION: WORK
+  ══════════════════════════════════ -->
+  <div id="sec-work" class="sheet-section">
+
+    <!-- Row 1 -->
+    <div class="row">
+      <div class="row-num">1</div>
+      <div class="cell link-cell" onclick="switchTab('home')">← HJEM</div>
+      <div class="cell"><span class="section-header">ARBEJDE / CASES</span></div>
+      <div class="cell span6"></div>
+    </div>
+
+    <div class="row empty"><div class="row-num">2</div><div class="cell span8"></div></div>
+
+    <!-- Project 01 -->
+    <div class="row">
+      <div class="row-num">3</div>
+      <div class="cell" style="background:#111;"></div>
+      <div class="cell span4" style="background:#111;padding:0;">
+        <div class="img-placeholder" style="min-height:240px;">[ BILLEDE 01 ]</div>
+      </div>
+      <div class="cell span3" style="display:flex;flex-direction:column;justify-content:center;padding:20px 16px;gap:8px;">
+        <span style="font-size:10px;color:#888;letter-spacing:2px;">01 / BRAND IDENTITY</span>
+        <span style="font-size:clamp(18px,3vw,32px);font-weight:900;text-transform:uppercase;line-height:1;">Project Alpha</span>
+        <span style="font-size:12px;color:#444;line-height:1.6;margin-top:4px;">
+          Komplet visuelt identitetssystem for en nordisk startup. Logodesign, typografi, farvepalette og brand guidelines.
+        </span>
+        <span style="font-size:10px;color:#888;margin-top:8px;">2024 · Brand Identity · Print · Digital</span>
+      </div>
+    </div>
+
+    <div class="row empty"><div class="row-num">4</div><div class="cell span8"></div></div>
+
+    <!-- Project 02 -->
+    <div class="row">
+      <div class="row-num">5</div>
+      <div class="cell span3" style="display:flex;flex-direction:column;justify-content:center;padding:20px 16px;gap:8px;">
+        <span style="font-size:10px;color:#888;letter-spacing:2px;">02 / CAMPAIGN</span>
+        <span style="font-size:clamp(18px,3vw,32px);font-weight:900;text-transform:uppercase;line-height:1;">Project Beta</span>
+        <span style="font-size:12px;color:#444;line-height:1.6;margin-top:4px;">
+          360° kampagne med fokus på storytelling og konsistent visuel kommunikation på tværs af kanaler.
+        </span>
+        <span style="font-size:10px;color:#888;margin-top:8px;">2024 · Campaign · Social Media · OOH</span>
+      </div>
+      <div class="cell span4" style="background:#e8e8e8;padding:0;">
+        <div class="img-placeholder" style="min-height:240px;background:#e8e8e8;color:#aaa;">[ BILLEDE 02 ]</div>
+      </div>
+      <div class="cell" style="background:#e8e8e8;"></div>
+    </div>
+
+    <div class="row empty"><div class="row-num">6</div><div class="cell span8"></div></div>
+
+    <!-- Project 03 -->
+    <div class="row">
+      <div class="row-num">7</div>
+      <div class="cell" style="background:#111;"></div>
+      <div class="cell span4" style="padding:0;">
+        <div class="img-placeholder" style="min-height:240px;">[ BILLEDE 03 ]</div>
+      </div>
+      <div class="cell span3" style="display:flex;flex-direction:column;justify-content:center;padding:20px 16px;gap:8px;">
+        <span style="font-size:10px;color:#888;letter-spacing:2px;">03 / ART DIRECTION</span>
+        <span style="font-size:clamp(18px,3vw,32px);font-weight:900;text-transform:uppercase;line-height:1;">Project Gamma</span>
+        <span style="font-size:12px;color:#444;line-height:1.6;margin-top:4px;">
+          Art direction og styling til editorial fotoprojekt. Konceptudvikling fra brief til færdigt produkt.
+        </span>
+        <span style="font-size:10px;color:#888;margin-top:8px;">2023 · Editorial · Photography · Styling</span>
+      </div>
+    </div>
+
+    <div class="row empty"><div class="row-num">8</div><div class="cell span8"></div></div>
+    <div class="row empty"><div class="row-num">9</div><div class="cell span8"></div></div>
+
+  </div><!-- /sec-work -->
+
+
+  <!-- ══════════════════════════════════
+       SECTION: ABOUT
+  ══════════════════════════════════ -->
+  <div id="sec-about" class="sheet-section">
+
+    <div class="row">
+      <div class="row-num">1</div>
+      <div class="cell link-cell" onclick="switchTab('home')">← HJEM</div>
+      <div class="cell"><span class="section-header">OM MIG</span></div>
+      <div class="cell span6"></div>
+    </div>
+
+    <div class="row empty"><div class="row-num">2</div><div class="cell span8"></div></div>
+
+    <!-- name block -->
+    <div class="row tall">
+      <div class="row-num">3</div>
+      <div class="cell span3" style="padding:0;">
+        <div class="img-placeholder" style="min-height:200px;">[ PORTRÆT ]</div>
+      </div>
+      <div class="cell span5" style="padding:24px 20px;display:flex;flex-direction:column;justify-content:center;gap:12px;">
+        <div>
+          <span style="font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;">Navn</span><br>
+          <span style="font-size:clamp(24px,4vw,48px);font-weight:900;text-transform:uppercase;line-height:1;">CINDY MAC</span>
+        </div>
+        <div>
+          <span style="font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;">Titel</span><br>
+          <span style="font-size:16px;font-weight:bold;text-transform:uppercase;">Art Director</span>
+        </div>
+        <div>
+          <span style="font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;">Baseret i</span><br>
+          <span style="font-size:13px;">København, Danmark</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row empty"><div class="row-num">4</div><div class="cell span8"></div></div>
+
+    <!-- bio -->
+    <div class="row">
+      <div class="row-num">5</div>
+      <div class="cell span2">
+        <span class="section-header">BIOGRAFI</span>
+      </div>
+      <div class="cell span6">
+        <div class="body-text">
+          [Skriv din biografi her. Fortæl om din baggrund, hvad der driver dig, og hvad du bringer til bordet som art director. Hold det autentisk og direkte — ligesom dit arbejde.]
+        </div>
+      </div>
+    </div>
+
+    <div class="row empty"><div class="row-num">6</div><div class="cell span8"></div></div>
+
+    <!-- skills -->
+    <div class="row">
+      <div class="row-num">7</div>
+      <div class="cell span2"><span class="section-header">KOMPETENCER</span></div>
+      <div class="cell span2">
+        <div class="body-text">
+          Art Direction<br>
+          Brand Identity<br>
+          Campaign Development<br>
+          Typography
+        </div>
+      </div>
+      <div class="cell span2">
+        <div class="body-text">
+          Editorial Design<br>
+          Visual Storytelling<br>
+          Creative Strategy<br>
+          Photo Direction
+        </div>
+      </div>
+      <div class="cell span2">
+        <div class="body-text">
+          Adobe Creative Suite<br>
+          Figma<br>
+          Print Production<br>
+          Client Management
+        </div>
+      </div>
+    </div>
+
+    <div class="row empty"><div class="row-num">8</div><div class="cell span8"></div></div>
+
+    <!-- selected clients -->
+    <div class="row">
+      <div class="row-num">9</div>
+      <div class="cell span2"><span class="section-header">UDVALGTE KLIENTER</span></div>
+      <div class="cell span6">
+        <div class="body-text">
+          [Klient 1] &nbsp;&nbsp; [Klient 2] &nbsp;&nbsp; [Klient 3] &nbsp;&nbsp; [Klient 4] &nbsp;&nbsp; [Klient 5]
+        </div>
+      </div>
+    </div>
+
+    <div class="row empty"><div class="row-num">10</div><div class="cell span8"></div></div>
+    <div class="row empty"><div class="row-num">11</div><div class="cell span8"></div></div>
+
+  </div><!-- /sec-about -->
+
+
+  <!-- ══════════════════════════════════
+       SECTION: CONTACT
+  ══════════════════════════════════ -->
+  <div id="sec-contact" class="sheet-section">
+
+    <div class="row">
+      <div class="row-num">1</div>
+      <div class="cell link-cell" onclick="switchTab('home')">← HJEM</div>
+      <div class="cell"><span class="section-header">KONTAKT</span></div>
+      <div class="cell span6"></div>
+    </div>
+
+    <div class="row empty"><div class="row-num">2</div><div class="cell span8"></div></div>
+
+    <!-- big contact header -->
+    <div class="row tall">
+      <div class="row-num">3</div>
+      <div class="cell span5" style="display:flex;align-items:center;padding:20px;">
+        <span style="font-size:clamp(20px,4vw,52px);font-weight:900;text-transform:uppercase;line-height:1.1;letter-spacing:-1px;">
+          LAD OS<br>TALE<br>SAMMEN.
+        </span>
+      </div>
+      <div class="cell span3" style="display:flex;flex-direction:column;justify-content:center;padding:20px 16px;gap:16px;">
+        <div class="contact-item">
+          <span class="c-label">EMAIL</span>
+          <a href="mailto:hej@cindymac.dk">hej@cindymac.dk</a>
+        </div>
+        <div class="contact-item">
+          <span class="c-label">INSTAGRAM</span>
+          <a href="#" target="_blank">@cindymac</a>
+        </div>
+        <div class="contact-item">
+          <span class="c-label">LINKEDIN</span>
+          <a href="#" target="_blank">linkedin.com/in/cindymac</a>
+        </div>
+        <div class="contact-item">
+          <span class="c-label">LOKATION</span>
+          <span>København, DK</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row empty"><div class="row-num">4</div><div class="cell span8"></div></div>
+
+    <!-- availability -->
+    <div class="row">
+      <div class="row-num">5</div>
+      <div class="cell span2"><span class="section-header">TILGÆNGELIGHED</span></div>
+      <div class="cell span6">
+        <div class="body-text" style="display:flex;align-items:center;gap:10px;">
+          <span style="display:inline-block;width:10px;height:10px;background:#00cc44;border-radius:50%;"></span>
+          Tilgængelig for nye projekter og samarbejder — skriv endelig.
+        </div>
+      </div>
+    </div>
+
+    <div class="row empty"><div class="row-num">6</div><div class="cell span8"></div></div>
+    <div class="row empty"><div class="row-num">7</div><div class="cell span8"></div></div>
+
+  </div><!-- /sec-contact -->
+
+</div><!-- /sheet -->
+</div><!-- /sheet-wrapper -->
+
+<!-- TAB BAR -->
+<div id="tab-bar">
+  <div class="tab active" id="tab-home" onclick="switchTab('home')">Home</div>
+  <div class="tab" id="tab-work" onclick="switchTab('work')">Arbejde</div>
+  <div class="tab" id="tab-about" onclick="switchTab('about')">Om mig</div>
+  <div class="tab" id="tab-contact" onclick="switchTab('contact')">Kontakt</div>
+</div>
+
+<script>
+  const sections = ['home', 'work', 'about', 'contact'];
+  const formulae = {
+    home: '=CINDY_MAC("ART DIRECTOR")',
+    work: '=FILTER(projekter, kategori="ALL")',
+    about: '=VLOOKUP("CINDY_MAC", profil, 2, FALSE)',
+    contact: '=MAILTO("hej@cindymac.dk")',
+  };
+
+  function switchTab(name) {
+    sections.forEach(s => {
+      document.getElementById('sec-' + s).classList.remove('visible');
+      document.getElementById('tab-' + s).classList.remove('active');
+    });
+    document.getElementById('sec-' + name).classList.add('visible');
+    document.getElementById('tab-' + name).classList.add('active');
+    document.getElementById('formula-bar').textContent = formulae[name];
+    document.getElementById('sheet-wrapper').scrollTop = 0;
+  }
+
+  // cell click → update name box & formula bar
+  document.querySelectorAll('.cell').forEach((cell, i) => {
+    cell.addEventListener('click', function(e) {
+      // rough col/row for display
+      const row = this.closest('.row');
+      const rowNum = row ? row.querySelector('.row-num') : null;
+      const r = rowNum ? rowNum.textContent : '?';
+      const cols = 'ABCDEFGH';
+      const cells = Array.from(row ? row.querySelectorAll('.cell') : []);
+      const c = cols[cells.indexOf(this)] || 'A';
+      document.getElementById('name-box').value = c + r;
+    });
+  });
+</script>
+
+</body>
+</html>
