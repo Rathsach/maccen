@@ -11,19 +11,20 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --border: #c0c0c0;
+      --border: #c8c8c8;
       --border-dark: #888;
-      --row-h: 24px;
+      --row-h: 22px;
       --col-bg: #e8e8e8;
       --cell-bg: #fff;
       --tab-h: 34px;
       --blue: #2244ff;
       --link: #0000cc;
+      --card-gap: 9px;
     }
 
     body {
       font-family: 'Barlow', sans-serif;
-      background: #d0d0d0;
+      background: #aaa;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -68,12 +69,12 @@
       padding: 5px 10px 5px 56px;
       font-size: 12px;
       font-weight: 600;
-      font-family: 'Barlow', sans-serif;
       color: #000;
-      border-bottom: 1px solid rgba(0,0,0,0.2);
+      border-bottom: 1px solid rgba(0,0,0,0.18);
       align-items: center;
       gap: 10px;
       flex-shrink: 0;
+      background: #f0f0f0;
     }
     #status-bar.visible { display: flex; }
     .status-chip {
@@ -85,35 +86,32 @@
     }
 
     /* ── SHEET ── */
-    #sheet-wrapper { flex: 1; overflow: auto; }
-    #sheet { min-width: 100%; }
+    #sheet-wrapper { flex: 1; overflow: auto; background: #e0e0e0; }
+    #sheet { min-width: 100%; background: #fff; }
 
-    /* ── COLUMN HEADERS: C I N D Y M A C — plain grey ── */
+    /* ── COLUMN HEADERS: C I N D Y M A C ── */
     #col-headers {
       display: flex;
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 20;
       border-bottom: 2px solid var(--border-dark);
     }
     .row-num-spacer {
-      width: 48px;
-      min-width: 48px;
+      width: 48px; min-width: 48px;
       border-right: 1px solid var(--border);
       background: var(--col-bg);
     }
     .col-header {
       flex: 1;
-      height: 26px;
-      line-height: 26px;
+      height: 22px; line-height: 22px;
       text-align: center;
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 11px; font-weight: 700;
       font-family: 'Courier New', monospace;
       border-right: 1px solid var(--border);
-      user-select: none;
       background: var(--col-bg);
       color: #555;
+      user-select: none;
     }
 
     /* ── ROWS ── */
@@ -122,14 +120,8 @@
       border-bottom: 1px solid var(--border);
       min-height: var(--row-h);
     }
-    .row.tall   { min-height: 180px; }
-    .row.xtall  { min-height: 380px; }
-    .row.mtall  { min-height: 280px; }
-    .row.vidrow { min-height: 320px; }
-
     .row-num {
-      width: 48px;
-      min-width: 48px;
+      width: 48px; min-width: 48px;
       border-right: 2px solid var(--border-dark);
       background: var(--col-bg);
       font-size: 11px;
@@ -137,102 +129,135 @@
       color: #666;
       text-align: center;
       line-height: var(--row-h);
-      padding-top: 3px;
+      padding-top: 2px;
       user-select: none;
     }
-
     .cell {
       flex: 1;
       border-right: 1px solid var(--border);
       background: var(--cell-bg);
       padding: 3px 5px;
-      font-size: 12px;
-      color: #111;
+      font-size: 12px; color: #111;
       position: relative;
       overflow: hidden;
     }
-    .s2 { flex: 2; } .s3 { flex: 3; } .s4 { flex: 4; }
-    .s5 { flex: 5; } .s6 { flex: 6; } .s7 { flex: 7; } .s8 { flex: 8; }
+    .s2 { flex:2; } .s3 { flex:3; } .s4 { flex:4; }
+    .s5 { flex:5; } .s6 { flex:6; } .s7 { flex:7; } .s8 { flex:8; }
 
-    /* ── PROJECT CARD (inside a cell) ── */
-    .proj-cell {
+    /* ── CARD CELL: grey spreadsheet bg for cards to float on ── */
+    .card-cell {
+      background: var(--col-bg) !important;
+      padding: var(--card-gap) !important;
+      overflow: visible;
+    }
+
+    /* ── CARD WRAPPER: white card with shadow ── */
+    .card-wrap {
+      width: 100%; height: 100%;
+      background: #fff;
+      box-shadow: 3px 4px 0px rgba(0,0,0,0.22);
       display: flex;
       flex-direction: column;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-      transition: filter 0.15s;
+      overflow: hidden;
+      border: 1px solid #ddd;
     }
-    .proj-cell:hover { filter: brightness(0.93); }
-    .proj-img {
+    .card-wrap.clickable { cursor: pointer; }
+    .card-wrap.clickable:hover {
+      box-shadow: 5px 6px 0px rgba(0,0,0,0.28);
+      transform: translate(-1px, -1px);
+      transition: all 0.12s ease;
+    }
+
+    /* ── CARD: X wireframe image area ── */
+    .card-img {
       flex: 1;
       min-height: 0;
       position: relative;
       overflow: hidden;
+      background: #f0f0f0;
     }
-    .proj-img .ph {
-      width: 100%;
-      height: 100%;
-      min-height: 160px;
+    .card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
     }
-    .proj-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+    .xwire {
+      width: 100%; height: 100%;
+      background: #f5f5f5;
+      position: relative;
     }
-    .proj-info {
+    .xwire svg {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+
+    /* ── CARD FOOTER ── */
+    .card-footer {
       flex-shrink: 0;
-      padding: 10px 10px 12px;
+      padding: 10px 12px 12px;
       background: #fff;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid #efefef;
     }
-    .proj-info .p-num {
+    .card-footer .p-num {
       font-family: 'Barlow', sans-serif;
-      font-size: 10px;
-      color: #999;
+      font-size: 10px; color: #bbb;
       margin-bottom: 3px;
     }
-    .proj-info .p-title {
+    .card-footer .p-title {
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: clamp(14px, 1.8vw, 20px);
+      font-size: clamp(13px, 1.6vw, 18px);
       font-weight: 900;
       text-transform: uppercase;
-      line-height: 1.1;
       color: #000;
-      margin-bottom: 2px;
-    }
-    .proj-info .p-meta {
-      font-family: 'Barlow', sans-serif;
-      font-size: 10px;
-      color: #888;
+      line-height: 1.1;
       margin-bottom: 6px;
     }
-    .proj-info .p-link {
+    .card-footer .p-link {
       font-family: 'Barlow', sans-serif;
       font-size: 11px;
       color: var(--link);
       text-decoration: underline;
+      cursor: pointer;
     }
 
-    /* ── TEXT STYLES ── */
-    .section-label {
-      font-size: 10px;
+    /* ── NAME CARD ── */
+    .name-card-inner {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px 16px;
+      gap: 4px;
+    }
+    .name-card-inner .nc-label {
       font-family: 'Barlow', sans-serif;
-      font-weight: 500;
-      color: #888;
+      font-size: 10px; color: #aaa;
       text-transform: uppercase;
       letter-spacing: 2px;
-      display: block;
-      padding: 5px 2px;
+      margin-bottom: 6px;
     }
-    .body-text {
+    .name-card-inner .nc-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 0.95;
+      color: #000;
+    }
+    .name-card-inner .nc-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(14px, 1.8vw, 20px);
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #555;
+      margin-top: 6px;
+    }
+    .name-card-inner .nc-loc {
       font-family: 'Barlow', sans-serif;
-      font-size: 13px;
-      line-height: 1.7;
-      color: #222;
-      padding: 8px 6px;
+      font-size: 11px; color: #999;
+      margin-top: 2px;
     }
+
+    /* ── LINK CELLS ── */
     .link-cell {
       font-family: 'Barlow', sans-serif;
       color: var(--link);
@@ -242,65 +267,52 @@
     }
     .link-cell:hover { color: #0000aa; }
 
-    /* ── PLACEHOLDERS ── */
-    .ph {
-      width: 100%; height: 100%; min-height: 140px;
-      background: #ddd;
-      display: flex; align-items: center; justify-content: center;
-      flex-direction: column; gap: 8px;
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-size: 10px;
       font-family: 'Barlow', sans-serif;
-      font-size: 10px; color: #aaa;
-      text-transform: uppercase; letter-spacing: 1px;
-      /* wireframe X cross */
-      position: relative;
+      font-weight: 500; color: #999;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      display: block; padding: 5px 2px;
     }
-    /* X-mark wireframe like the screenshot */
-    .ph::before, .ph::after {
-      content: '';
-      position: absolute;
-      background: #ccc;
-      pointer-events: none;
-    }
-    .ph::before {
-      width: 1px; height: 100%;
-      top: 0; left: 50%;
-      transform: rotate(calc(atan2(100%, 100%)));
-      transform-origin: center;
-    }
-    .ph.dark { background: #f0f0f0; color: #bbb; }
-    .ph.dark::before, .ph.dark::after { background: #ccc; }
 
-    /* Better X using SVG-like approach */
-    .ph-x {
-      width: 100%; height: 100%; min-height: 160px;
-      background: #f8f8f8;
-      position: relative;
-      overflow: hidden;
+    /* ── ABOUT / CONTACT / BODY TEXT ── */
+    .body-text {
+      font-family: 'Barlow', sans-serif;
+      font-size: 13px; line-height: 1.7; color: #222;
+      padding: 8px 6px;
     }
-    .ph-x svg {
-      width: 100%; height: 100%;
+    .contact-item { display: flex; align-items: center; gap: 10px; padding: 5px 0; font-size: 13px; }
+    .contact-item .cl { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; width: 80px; }
+    .contact-item a { color: var(--link); text-decoration: underline; }
+    .avail-dot { display: inline-block; width: 8px; height: 8px; background: #00cc44; border-radius: 50%; margin-right: 6px; }
+
+    /* ── PROJECT DETAIL SPECIFICS ── */
+    .ph-dark {
+      width: 100%; min-height: 300px;
+      background: #f0f0f0; position: relative; overflow: hidden;
+    }
+    .ph-dark svg {
       position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
     }
-
-    .ph.vid  { background: #111; color: #444; cursor: pointer; }
-    .ph.vid:hover { background: #181818; }
+    .ph-vid {
+      min-height: 280px; background: #111;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 10px; cursor: pointer;
+      font-family: 'Barlow', sans-serif;
+      font-size: 10px; color: #555;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .ph-vid:hover { background: #181818; }
     .play-btn {
       width: 44px; height: 44px;
       border: 2px solid #444; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-size: 16px; color: #555;
     }
-
-    /* ── CONTACT ── */
-    .contact-item { display: flex; align-items: center; gap: 10px; padding: 5px 0; font-size: 13px; }
-    .contact-item .cl {
-      font-family: 'Barlow', sans-serif;
-      font-size: 10px; color: #888;
-      text-transform: uppercase; letter-spacing: 1px;
-      width: 80px;
-    }
-    .contact-item a { color: var(--link); text-decoration: underline; }
-    .avail-dot { display: inline-block; width: 8px; height: 8px; background: #00cc44; border-radius: 50%; margin-right: 6px; }
 
     /* ── TAB BAR ── */
     #tab-bar {
@@ -310,15 +322,12 @@
       display: flex; align-items: flex-end;
       height: var(--tab-h);
       gap: 3px; padding: 0 8px;
-      z-index: 10; overflow-x: auto;
-      flex-shrink: 0;
+      z-index: 10; overflow-x: auto; flex-shrink: 0;
     }
     .tab {
       height: 28px; line-height: 28px;
       padding: 0 14px;
-      font-size: 11px;
-      font-family: 'Barlow', sans-serif;
-      font-weight: 600;
+      font-size: 11px; font-family: 'Barlow', sans-serif; font-weight: 600;
       border: 1px solid var(--border-dark); border-bottom: none;
       cursor: pointer; user-select: none; white-space: nowrap;
       background: #b8b8b8; color: #555;
@@ -326,7 +335,7 @@
     }
     .tab:hover { background: #cacaca; }
     .tab.active { background: #fff; color: #000; border-top: 2px solid #000; }
-    #tab-project        { display: none; }
+    #tab-project { display: none; }
     #tab-project.active { display: block; }
 
     /* ── SECTIONS ── */
@@ -339,7 +348,6 @@
     ::-webkit-scrollbar-thumb { background: #aaa; border: 2px solid #d0d0d0; }
 
     @media (max-width: 640px) {
-      .proj-info .p-title { font-size: 13px; }
       .tab { padding: 0 10px; font-size: 10px; }
     }
   </style>
@@ -376,120 +384,121 @@
   <!-- ═══════════ HOME ═══════════ -->
   <div id="sec-home" class="sheet-section visible">
 
-    <!-- Row 1: navigation -->
+    <!-- Row 1: Navigation -->
     <div class="row">
       <div class="row-num">1</div>
       <div class="cell"></div>
       <div class="cell link-cell" onclick="switchTab('work')">WORK</div>
       <div class="cell link-cell" onclick="switchTab('about')">ABOUT</div>
       <div class="cell link-cell" onclick="switchTab('contact')">CONTACT</div>
-      <div class="cell"></div>
-      <div class="cell"></div>
-      <div class="cell"></div>
-      <div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
     </div>
 
-    <!-- Row 2: section label -->
+    <!-- Row 2: label -->
     <div class="row">
       <div class="row-num">2</div>
-      <div class="cell s8"><span class="section-label">Selected Work — Click to explore</span></div>
+      <div class="cell s8" style="background:#fff;"><span class="section-label">Selected Work</span></div>
     </div>
 
-    <!-- Row 3–10: Projects 01 + 02 (large) -->
-    <div class="row xtall">
+    <!-- Rows 3–13: Name card + Projects 01–02 (tall) -->
+    <div class="row" style="min-height:360px;">
       <div class="row-num">3</div>
-      <div class="cell s4" style="padding:0;" id="home-p1"></div>
-      <div class="cell s4" style="padding:0;" id="home-p2"></div>
+      <div class="cell s2 card-cell" id="home-name"></div>
+      <div class="cell s3 card-cell" id="home-p1"></div>
+      <div class="cell s3 card-cell" id="home-p2"></div>
     </div>
 
-    <!-- Row 11: separator -->
+    <!-- Row 14: spacer -->
     <div class="row">
-      <div class="row-num">11</div>
+      <div class="row-num">14</div>
       <div class="cell s8" style="background:#f5f5f5;"></div>
     </div>
 
-    <!-- Row 12–19: Projects 03, 04, 05 (medium) -->
-    <div class="row mtall">
-      <div class="row-num">12</div>
-      <div class="cell s3" style="padding:0;" id="home-p3"></div>
-      <div class="cell s3" style="padding:0;" id="home-p4"></div>
-      <div class="cell s2" style="padding:0;" id="home-p5"></div>
+    <!-- Rows 15–24: Projects 03–05 (medium) -->
+    <div class="row" style="min-height:280px;">
+      <div class="row-num">15</div>
+      <div class="cell s3 card-cell" id="home-p3"></div>
+      <div class="cell s3 card-cell" id="home-p4"></div>
+      <div class="cell s2 card-cell" id="home-p5"></div>
     </div>
 
-    <!-- Row 20: view all -->
+    <!-- Row 25: spacer -->
     <div class="row">
-      <div class="row-num">20</div>
+      <div class="row-num">25</div>
+      <div class="cell s8" style="background:#f5f5f5;"></div>
+    </div>
+
+    <!-- Rows 26–32: Project 06 full width -->
+    <div class="row" style="min-height:220px;">
+      <div class="row-num">26</div>
+      <div class="cell s8 card-cell" id="home-p6"></div>
+    </div>
+
+    <!-- Row 33: view all -->
+    <div class="row">
+      <div class="row-num">33</div>
       <div class="cell s8" style="display:flex;align-items:center;padding:6px 10px;background:#f9f9f9;">
         <span class="link-cell" onclick="switchTab('work')" style="font-size:11px;">View all work →</span>
       </div>
     </div>
 
-    <div class="row"><div class="row-num">21</div><div class="cell s8" style="background:#f0f0f0;"></div></div>
-    <div class="row"><div class="row-num">22</div><div class="cell s8" style="background:#ececec;"></div></div>
+    <div class="row"><div class="row-num">34</div><div class="cell s8" style="background:#f0f0f0;height:20px;"></div></div>
 
   </div><!-- /sec-home -->
 
   <!-- ═══════════ WORK ═══════════ -->
   <div id="sec-work" class="sheet-section">
-
     <div class="row">
       <div class="row-num">1</div>
       <div class="cell link-cell" onclick="switchTab('home')">← Home</div>
       <div class="cell s7"><span class="section-label">Work / Cases</span></div>
     </div>
-
     <div class="row"><div class="row-num">2</div><div class="cell s8"></div></div>
-
     <div id="work-list"></div>
-
     <div class="row"><div class="row-num">99</div><div class="cell s8" style="background:#f5f5f5;"></div></div>
-
-  </div><!-- /sec-work -->
+  </div>
 
   <!-- ═══════════ ABOUT ═══════════ -->
   <div id="sec-about" class="sheet-section">
-
     <div class="row">
       <div class="row-num">1</div>
       <div class="cell link-cell" onclick="switchTab('home')">← Home</div>
       <div class="cell s7"><span class="section-label">About</span></div>
     </div>
-
     <div class="row"><div class="row-num">2</div><div class="cell s8"></div></div>
 
-    <div class="row tall">
+    <div class="row" style="min-height:200px;">
       <div class="row-num">3</div>
-      <div class="cell s3" style="padding:0;">
-        <div class="ph" style="min-height:200px;">[ Portrait ]</div>
+      <div class="cell s3 card-cell" style="min-height:200px;">
+        <div class="card-wrap" style="background:#f0f0f0;border:none;box-shadow:none;">
+          <div class="xwire" style="height:100%;">
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none"><rect width="100" height="100" fill="#f0f0f0"/><line x1="0" y1="0" x2="100" y2="100" stroke="#ccc" stroke-width="0.6" vector-effect="non-scaling-stroke"/><line x1="100" y1="0" x2="0" y2="100" stroke="#ccc" stroke-width="0.6" vector-effect="non-scaling-stroke"/></svg>
+          </div>
+        </div>
       </div>
       <div class="cell s5" style="display:flex;flex-direction:column;justify-content:center;padding:24px 18px;gap:14px;">
         <div>
-          <div style="font-family:'Barlow',sans-serif;font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;">Name</div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,4.5vw,56px);font-weight:900;text-transform:uppercase;line-height:1;">CINDY MAC</div>
+          <div style="font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;font-family:'Barlow',sans-serif;">Name</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,4.5vw,52px);font-weight:900;text-transform:uppercase;line-height:1;">CINDY MAC</div>
         </div>
         <div>
-          <div style="font-family:'Barlow',sans-serif;font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;">Title</div>
+          <div style="font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;font-family:'Barlow',sans-serif;">Title</div>
           <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;">Creative</div>
         </div>
         <div>
-          <div style="font-family:'Barlow',sans-serif;font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;">Based in</div>
+          <div style="font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;font-family:'Barlow',sans-serif;">Based in</div>
           <div style="font-family:'Barlow',sans-serif;font-size:13px;">Copenhagen, Denmark</div>
         </div>
       </div>
     </div>
 
     <div class="row"><div class="row-num">4</div><div class="cell s8"></div></div>
-
     <div class="row">
       <div class="row-num">5</div>
       <div class="cell s2" style="background:#f9f9f9;"><span class="section-label">Biography</span></div>
-      <div class="cell s6">
-        <div class="body-text">[Write your biography here. Talk about your background, what drives you, and what you bring to the table as a creative. Keep it raw and authentic.]</div>
-      </div>
+      <div class="cell s6"><div class="body-text">[Write your biography here. Talk about your background, what drives you, and what you bring to the table as a creative. Keep it raw and authentic.]</div></div>
     </div>
-
     <div class="row"><div class="row-num">6</div><div class="cell s8"></div></div>
-
     <div class="row">
       <div class="row-num">7</div>
       <div class="cell s2" style="background:#f9f9f9;"><span class="section-label">Skills</span></div>
@@ -497,32 +506,25 @@
       <div class="cell s2"><div class="body-text">Editorial Design<br>Visual Storytelling<br>Creative Strategy<br>Photo Direction</div></div>
       <div class="cell s2"><div class="body-text">Adobe Suite<br>Figma<br>Print Production<br>Client Management</div></div>
     </div>
-
     <div class="row"><div class="row-num">8</div><div class="cell s8"></div></div>
-
     <div class="row">
       <div class="row-num">9</div>
       <div class="cell s2" style="background:#f9f9f9;"><span class="section-label">Selected Clients</span></div>
       <div class="cell s6"><div class="body-text">[Client 1] &nbsp; [Client 2] &nbsp; [Client 3] &nbsp; [Client 4] &nbsp; [Client 5]</div></div>
     </div>
-
     <div class="row"><div class="row-num">10</div><div class="cell s8"></div></div>
     <div class="row"><div class="row-num">11</div><div class="cell s8" style="background:#f5f5f5;"></div></div>
-
-  </div><!-- /sec-about -->
+  </div>
 
   <!-- ═══════════ CONTACT ═══════════ -->
   <div id="sec-contact" class="sheet-section">
-
     <div class="row">
       <div class="row-num">1</div>
       <div class="cell link-cell" onclick="switchTab('home')">← Home</div>
       <div class="cell s7"><span class="section-label">Contact</span></div>
     </div>
-
     <div class="row"><div class="row-num">2</div><div class="cell s8"></div></div>
-
-    <div class="row tall">
+    <div class="row" style="min-height:180px;">
       <div class="row-num">3</div>
       <div class="cell s5" style="display:flex;align-items:center;padding:24px 20px;">
         <span style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(26px,5vw,64px);font-weight:900;text-transform:uppercase;line-height:1.0;letter-spacing:-1px;">
@@ -530,39 +532,21 @@
         </span>
       </div>
       <div class="cell s3" style="display:flex;flex-direction:column;justify-content:center;padding:20px 16px;gap:14px;">
-        <div class="contact-item">
-          <span class="cl">Email</span>
-          <a href="mailto:hello@cindymac.dk">hello@cindymac.dk</a>
-        </div>
-        <div class="contact-item">
-          <span class="cl">Instagram</span>
-          <a href="#" target="_blank">@cindymac</a>
-        </div>
-        <div class="contact-item">
-          <span class="cl">LinkedIn</span>
-          <a href="#" target="_blank">linkedin.com/in/cindymac</a>
-        </div>
-        <div class="contact-item">
-          <span class="cl">Location</span>
-          <span>Copenhagen, DK</span>
-        </div>
+        <div class="contact-item"><span class="cl">Email</span><a href="mailto:hello@cindymac.dk">hello@cindymac.dk</a></div>
+        <div class="contact-item"><span class="cl">Instagram</span><a href="#" target="_blank">@cindymac</a></div>
+        <div class="contact-item"><span class="cl">LinkedIn</span><a href="#" target="_blank">linkedin.com/in/cindymac</a></div>
+        <div class="contact-item"><span class="cl">Location</span><span>Copenhagen, DK</span></div>
       </div>
     </div>
-
     <div class="row"><div class="row-num">4</div><div class="cell s8"></div></div>
-
     <div class="row">
       <div class="row-num">5</div>
       <div class="cell s2" style="background:#f9f9f9;"><span class="section-label">Availability</span></div>
-      <div class="cell s6">
-        <div class="body-text"><span class="avail-dot"></span>Available for new projects and collaborations — feel free to reach out.</div>
-      </div>
+      <div class="cell s6"><div class="body-text"><span class="avail-dot"></span>Available for new projects and collaborations — feel free to reach out.</div></div>
     </div>
-
     <div class="row"><div class="row-num">6</div><div class="cell s8"></div></div>
     <div class="row"><div class="row-num">7</div><div class="cell s8" style="background:#f5f5f5;"></div></div>
-
-  </div><!-- /sec-contact -->
+  </div>
 
   <!-- ═══════════ PROJECT DETAIL ═══════════ -->
   <div id="sec-project" class="sheet-section">
@@ -584,46 +568,12 @@
 <script>
 /* ── PROJECT DATA ── */
 const PROJECTS = [
-  {
-    id: 1, num: '01',
-    title: 'Project Alpha', cat: 'Brand Identity', year: '2024',
-    tags: ['Print', 'Digital', 'Guidelines'],
-    color: '#f7e000',
-    desc: '[Describe the idea behind Project Alpha. What was the brief? What was your approach and starting point? What do you want the viewer to feel? Keep it raw and direct — like your work.]',
-    images: 3, video: true
-  },
-  {
-    id: 2, num: '02',
-    title: 'Project Beta', cat: 'Campaign', year: '2024',
-    tags: ['Social Media', 'OOH', '360°'],
-    color: '#ff22aa',
-    desc: '[Describe the idea behind Project Beta. What was the brief? What was your approach? What does the project create?]',
-    images: 2, video: true
-  },
-  {
-    id: 3, num: '03',
-    title: 'Project Gamma', cat: 'Editorial', year: '2023',
-    tags: ['Photography', 'Styling', 'Art Direction'],
-    color: '#ff6600',
-    desc: '[Describe the idea behind Project Gamma. What was the brief? What was your approach?]',
-    images: 4, video: false
-  },
-  {
-    id: 4, num: '04',
-    title: 'Project Delta', cat: 'Motion', year: '2023',
-    tags: ['Animation', 'Video', 'Post-production'],
-    color: '#22ee55',
-    desc: '[Describe the idea behind Project Delta. What was the brief? What was your approach?]',
-    images: 2, video: true
-  },
-  {
-    id: 5, num: '05',
-    title: 'Project Epsilon', cat: 'Installation', year: '2022',
-    tags: ['Spatial Design', 'Exhibition', 'Concept'],
-    color: '#9933ff',
-    desc: '[Describe the idea behind Project Epsilon. What was the brief? What was your approach?]',
-    images: 3, video: false
-  },
+  { id:1, num:'01', title:'Project Alpha',   cat:'Brand Identity', year:'2024', tags:['Print','Digital','Guidelines'], color:'#f7e000', desc:'[Describe the idea behind Project Alpha. What was the brief? What was your approach and starting point? What do you want the viewer to feel? Keep it raw and direct.]', images:3, video:true  },
+  { id:2, num:'02', title:'Project Beta',    cat:'Campaign',       year:'2024', tags:['Social Media','OOH','360°'],   color:'#ff22aa', desc:'[Describe the idea behind Project Beta. What was the brief? What was your approach?]',   images:2, video:true  },
+  { id:3, num:'03', title:'Project Gamma',   cat:'Editorial',      year:'2023', tags:['Photography','Styling'],       color:'#ff6600', desc:'[Describe the idea behind Project Gamma. What was the brief? What was your approach?]',  images:4, video:false },
+  { id:4, num:'04', title:'Project Delta',   cat:'Motion',         year:'2023', tags:['Animation','Video'],           color:'#22ee55', desc:'[Describe the idea behind Project Delta. What was the brief? What was your approach?]',  images:2, video:true  },
+  { id:5, num:'05', title:'Project Epsilon', cat:'Installation',   year:'2022', tags:['Spatial Design','Exhibition'], color:'#9933ff', desc:'[Describe the idea behind Project Epsilon. What was the brief? What was your approach?]',images:3, video:false },
+  { id:6, num:'06', title:'Project Zeta',    cat:'Photography',    year:'2022', tags:['Studio','Editorial','Beauty'], color:'#ff3322', desc:'[Describe the idea behind Project Zeta. What was the brief? What was your approach?]',   images:3, video:true  },
 ];
 
 const FORMULAE = {
@@ -632,31 +582,43 @@ const FORMULAE = {
   about:   '=VLOOKUP("CINDY_MAC", profile, 2, FALSE)',
   contact: '=MAILTO("hello@cindymac.dk")',
 };
-
 const ALL_TABS = ['home','work','about','contact','project'];
 
-/* wireframe placeholder SVG (X cross like the screenshot) */
-function phSVG(label) {
+/* X-wire SVG helper */
+function xwireHTML(minH) {
+  const h = minH ? `style="min-height:${minH}px;"` : '';
+  return `<div class="xwire" ${h}>
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100" height="100" fill="#f5f5f5"/>
+      <line x1="0" y1="0" x2="100" y2="100" stroke="#c8c8c8" stroke-width="0.6" vector-effect="non-scaling-stroke"/>
+      <line x1="100" y1="0" x2="0" y2="100" stroke="#c8c8c8" stroke-width="0.6" vector-effect="non-scaling-stroke"/>
+    </svg>
+  </div>`;
+}
+
+/* project card for home grid */
+function homeCardHTML(p, landscape) {
   return `
-    <div class="ph-x">
-      <svg viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="100" height="100" fill="#f0f0f0"/>
-        <line x1="0" y1="0" x2="100" y2="100" stroke="#ccc" stroke-width="0.5" vector-effect="non-scaling-stroke"/>
-        <line x1="100" y1="0" x2="0" y2="100" stroke="#ccc" stroke-width="0.5" vector-effect="non-scaling-stroke"/>
-      </svg>
+    <div class="card-wrap clickable" onclick="openProject(${p.id})">
+      <div class="card-img">${xwireHTML(landscape ? 120 : 160)}</div>
+      <div class="card-footer">
+        <div class="p-num">${p.num}</div>
+        <div class="p-title">${p.title}</div>
+        <span class="p-link">View Project →</span>
+      </div>
     </div>`;
 }
 
-/* build a project card HTML for inside a cell */
-function projCardHTML(p) {
-  return `
-    <div class="proj-cell" onclick="openProject(${p.id})">
-      <div class="proj-img">${phSVG(p.num)}</div>
-      <div class="proj-info">
-        <div class="p-num">${p.num}</div>
-        <div class="p-title">${p.title}</div>
-        <div class="p-meta">${p.cat} · ${p.year}</div>
-        <span class="p-link">View Project →</span>
+/* name card */
+function buildNameCard() {
+  const el = document.getElementById('home-name');
+  el.innerHTML = `
+    <div class="card-wrap">
+      <div class="name-card-inner">
+        <div class="nc-label">Portfolio</div>
+        <div class="nc-name">CINDY<br>MAC</div>
+        <div class="nc-title">Creative</div>
+        <div class="nc-loc">Copenhagen, DK</div>
       </div>
     </div>`;
 }
@@ -664,51 +626,44 @@ function projCardHTML(p) {
 /* ── TAB SWITCHING ── */
 function switchTab(name) {
   ALL_TABS.forEach(s => {
-    document.getElementById('sec-' + s)?.classList.remove('visible');
-    document.getElementById('tab-' + s)?.classList.remove('active');
+    document.getElementById('sec-'+s)?.classList.remove('visible');
+    document.getElementById('tab-'+s)?.classList.remove('active');
   });
-  document.getElementById('sec-' + name).classList.add('visible');
-  document.getElementById('tab-' + name).classList.add('active');
+  document.getElementById('sec-'+name).classList.add('visible');
+  document.getElementById('tab-'+name).classList.add('active');
   document.getElementById('formula-bar').textContent = FORMULAE[name] || '=...';
   document.getElementById('sheet-wrapper').scrollTop = 0;
-
-  document.getElementById('tab-project').style.display =
-    (name === 'project') ? 'block' : 'none';
-
-  if (name !== 'project') {
-    document.getElementById('status-bar').classList.remove('visible');
-  }
+  document.getElementById('tab-project').style.display = (name==='project') ? 'block' : 'none';
+  if (name !== 'project') document.getElementById('status-bar').classList.remove('visible');
 }
 
-/* ── OPEN PROJECT DETAIL ── */
+/* ── OPEN PROJECT ── */
 function openProject(id) {
   const p = PROJECTS.find(x => x.id === id);
   if (!p) return;
-
   const isDark = id === 5;
   const tc = isDark ? '#fff' : '#000';
-  const metaColor = isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.4)';
+  const mc = isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.38)';
 
   const tagsHtml = p.tags.map(t =>
     `<span class="status-chip" style="background:${p.color};color:${tc};">${t}</span>`
   ).join('');
 
   let imgHtml = '';
-  for (let i = 1; i <= p.images; i++) {
-    imgHtml += `<div class="cell" style="padding:0;">${phSVG('Image ' + i)}</div>`;
+  for (let i=1; i<=p.images; i++) {
+    imgHtml += `<div class="cell" style="padding:0;">
+      <div class="ph-dark" style="min-height:220px;">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none"><rect width="100" height="100" fill="#f5f5f5"/><line x1="0" y1="0" x2="100" y2="100" stroke="#c8c8c8" stroke-width="0.6" vector-effect="non-scaling-stroke"/><line x1="100" y1="0" x2="0" y2="100" stroke="#c8c8c8" stroke-width="0.6" vector-effect="non-scaling-stroke"/></svg>
+      </div>
+    </div>`;
   }
 
   const videoHtml = p.video ? `
     <div class="row"><div class="row-num">7</div><div class="cell s8" style="background:#f5f5f5;"></div></div>
-    <div class="row vidrow">
+    <div class="row" style="min-height:300px;">
       <div class="row-num">8</div>
       <div class="cell" style="background:#f5f5f5;"></div>
-      <div class="cell s6" style="padding:0;">
-        <div class="ph vid" style="min-height:300px;">
-          <div class="play-btn">▶</div>
-          <span>[ Video — paste YouTube / Vimeo URL ]</span>
-        </div>
-      </div>
+      <div class="cell s6" style="padding:0;"><div class="ph-vid"><div class="play-btn">▶</div><span>[ Video — paste YouTube / Vimeo URL ]</span></div></div>
       <div class="cell" style="background:#f5f5f5;"></div>
     </div>` : '';
 
@@ -719,10 +674,10 @@ function openProject(id) {
       <div class="cell s7"><span class="section-label">${p.num} / ${p.cat.toUpperCase()} · ${p.year}</span></div>
     </div>
 
-    <div class="row tall" style="min-height:160px;">
+    <div class="row" style="min-height:160px;">
       <div class="row-num">2</div>
       <div class="cell s8" style="background:${p.color};display:flex;flex-direction:column;justify-content:center;padding:24px 28px;gap:12px;">
-        <div style="font-family:'Barlow',sans-serif;font-size:10px;color:${metaColor};letter-spacing:2px;text-transform:uppercase;">${p.year} · ${p.cat}</div>
+        <div style="font-family:'Barlow',sans-serif;font-size:10px;color:${mc};letter-spacing:2px;text-transform:uppercase;">${p.year} · ${p.cat}</div>
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(32px,5.5vw,72px);font-weight:900;text-transform:uppercase;line-height:0.93;letter-spacing:-2px;color:${tc};">${p.title}</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">${tagsHtml}</div>
       </div>
@@ -730,22 +685,23 @@ function openProject(id) {
 
     <div class="row" style="min-height:340px;">
       <div class="row-num">3</div>
-      <div class="cell s8" style="padding:0;">${phSVG('Primary Image')}</div>
+      <div class="cell s8" style="padding:0;">
+        <div class="ph-dark" style="min-height:340px;">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none"><rect width="100" height="100" fill="#f5f5f5"/><line x1="0" y1="0" x2="100" y2="100" stroke="#c8c8c8" stroke-width="0.6" vector-effect="non-scaling-stroke"/><line x1="100" y1="0" x2="0" y2="100" stroke="#c8c8c8" stroke-width="0.6" vector-effect="non-scaling-stroke"/></svg>
+        </div>
+      </div>
     </div>
 
     <div class="row">
       <div class="row-num">4</div>
       <div class="cell s2" style="background:#f5f5f5;"><span class="section-label">The Idea</span></div>
-      <div class="cell s6">
-        <div class="body-text" style="max-width:680px;font-size:13px;line-height:1.85;">${p.desc}</div>
-      </div>
+      <div class="cell s6"><div class="body-text" style="max-width:680px;font-size:13px;line-height:1.85;">${p.desc}</div></div>
     </div>
 
     <div class="row"><div class="row-num">5</div><div class="cell s8" style="background:#f5f5f5;"></div></div>
 
-    <div class="row tall">
-      <div class="row-num">6</div>
-      ${imgHtml}
+    <div class="row" style="min-height:220px;">
+      <div class="row-num">6</div>${imgHtml}
     </div>
 
     ${videoHtml}
@@ -761,11 +717,9 @@ function openProject(id) {
     <div class="row"><div class="row-num">11</div><div class="cell s8" style="background:#ececec;"></div></div>
   `;
 
-  const nextProj = PROJECTS.find(x => x.id === id + 1);
-  if (nextProj) {
-    document.getElementById('proj-next-btn').innerHTML =
-      `<span class="link-cell" onclick="openProject(${nextProj.id})" style="font-size:11px;">Next: ${nextProj.num} ${nextProj.title} →</span>`;
-  }
+  const next = PROJECTS.find(x => x.id === id+1);
+  if (next) document.getElementById('proj-next-btn').innerHTML =
+    `<span class="link-cell" onclick="openProject(${next.id})" style="font-size:11px;">Next: ${next.num} ${next.title} →</span>`;
 
   document.getElementById('tab-project').textContent = p.num + ' ' + p.title;
   FORMULAE['project'] = `=GET_PROJECT("${p.title}", ${p.year})`;
@@ -773,18 +727,18 @@ function openProject(id) {
   const sb = document.getElementById('status-bar');
   sb.innerHTML = `<span class="status-chip" style="background:${p.color};color:${tc};">${p.num}</span> Viewing: <strong>${p.title}</strong> — ${p.cat} · ${p.year}`;
   sb.classList.add('visible');
-
   switchTab('project');
 }
 
 /* ── BUILD HOME CARDS ── */
 function buildHomeCards() {
-  [1, 2, 3, 4, 5].forEach(id => {
+  buildNameCard();
+  [1,2,3,4,5].forEach(id => {
     const el = document.getElementById('home-p' + id);
-    if (!el) return;
-    const p = PROJECTS.find(x => x.id === id);
-    el.innerHTML = projCardHTML(p);
+    if (el) el.innerHTML = homeCardHTML(PROJECTS.find(x => x.id===id));
   });
+  const p6el = document.getElementById('home-p6');
+  if (p6el) p6el.innerHTML = homeCardHTML(PROJECTS.find(x => x.id===6), true);
 }
 
 /* ── BUILD WORK LIST ── */
@@ -792,29 +746,30 @@ function buildWorkSection() {
   const container = document.getElementById('work-list');
   let html = '';
   PROJECTS.forEach((p, i) => {
-    const rn = 3 + i * 2;
+    const rn = 3 + i*2;
     const flip = i % 2 === 1;
     const isDark = p.id === 5;
     const tc = isDark ? '#fff' : '#000';
     const imgCell = `
       <div class="cell s4" style="padding:0;cursor:pointer;" onclick="openProject(${p.id})">
-        ${phSVG(p.num)}
+        <div class="xwire" style="width:100%;height:100%;min-height:260px;">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none"><rect width="100" height="100" fill="#f5f5f5"/><line x1="0" y1="0" x2="100" y2="100" stroke="#c8c8c8" stroke-width="0.6" vector-effect="non-scaling-stroke"/><line x1="100" y1="0" x2="0" y2="100" stroke="#c8c8c8" stroke-width="0.6" vector-effect="non-scaling-stroke"/></svg>
+        </div>
       </div>`;
     const textCell = `
       <div class="cell s4" style="display:flex;flex-direction:column;justify-content:center;padding:22px 18px;gap:10px;cursor:pointer;" onclick="openProject(${p.id})">
         <div style="font-family:'Barlow',sans-serif;font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;">${p.num} / ${p.cat.toUpperCase()}</div>
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(22px,3.2vw,42px);font-weight:900;text-transform:uppercase;line-height:1;">${p.title}</div>
-        <div style="font-family:'Barlow',sans-serif;font-size:12px;color:#555;line-height:1.65;">${p.desc.substring(0, 100)}...</div>
+        <div style="font-family:'Barlow',sans-serif;font-size:12px;color:#555;line-height:1.65;">${p.desc.substring(0,100)}...</div>
         <div style="font-family:'Barlow',sans-serif;font-size:10px;color:#999;">${p.year} · ${p.tags.join(' · ')}</div>
         <span class="link-cell" style="font-size:11px;margin-top:2px;">View Project →</span>
       </div>`;
     html += `
       <div class="row" style="min-height:260px;">
         <div class="row-num">${rn}</div>
-        ${flip ? textCell + imgCell : imgCell + textCell}
+        ${flip ? textCell+imgCell : imgCell+textCell}
       </div>
-      <div class="row"><div class="row-num">${rn + 1}</div><div class="cell s8" style="background:#f5f5f5;"></div></div>
-    `;
+      <div class="row"><div class="row-num">${rn+1}</div><div class="cell s8" style="background:#f5f5f5;"></div></div>`;
   });
   container.innerHTML = html;
 }
