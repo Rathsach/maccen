@@ -88,7 +88,7 @@
     #sheet-wrapper { flex: 1; overflow: auto; }
     #sheet { min-width: 100%; }
 
-    /* ── COLUMN HEADERS ── */
+    /* ── COLUMN HEADERS: C I N D Y M A C — plain grey ── */
     #col-headers {
       display: flex;
       position: sticky;
@@ -123,8 +123,8 @@
       min-height: var(--row-h);
     }
     .row.tall   { min-height: 180px; }
-    .row.xtall  { min-height: 280px; }
-    .row.hero   { min-height: 380px; }
+    .row.xtall  { min-height: 380px; }
+    .row.mtall  { min-height: 280px; }
     .row.vidrow { min-height: 320px; }
 
     .row-num {
@@ -154,6 +154,67 @@
     .s2 { flex: 2; } .s3 { flex: 3; } .s4 { flex: 4; }
     .s5 { flex: 5; } .s6 { flex: 6; } .s7 { flex: 7; } .s8 { flex: 8; }
 
+    /* ── PROJECT CARD (inside a cell) ── */
+    .proj-cell {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      transition: filter 0.15s;
+    }
+    .proj-cell:hover { filter: brightness(0.93); }
+    .proj-img {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .proj-img .ph {
+      width: 100%;
+      height: 100%;
+      min-height: 160px;
+    }
+    .proj-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .proj-info {
+      flex-shrink: 0;
+      padding: 10px 10px 12px;
+      background: #fff;
+      border-top: 1px solid var(--border);
+    }
+    .proj-info .p-num {
+      font-family: 'Barlow', sans-serif;
+      font-size: 10px;
+      color: #999;
+      margin-bottom: 3px;
+    }
+    .proj-info .p-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(14px, 1.8vw, 20px);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1.1;
+      color: #000;
+      margin-bottom: 2px;
+    }
+    .proj-info .p-meta {
+      font-family: 'Barlow', sans-serif;
+      font-size: 10px;
+      color: #888;
+      margin-bottom: 6px;
+    }
+    .proj-info .p-link {
+      font-family: 'Barlow', sans-serif;
+      font-size: 11px;
+      color: var(--link);
+      text-decoration: underline;
+    }
+
     /* ── TEXT STYLES ── */
     .section-label {
       font-size: 10px;
@@ -164,15 +225,6 @@
       letter-spacing: 2px;
       display: block;
       padding: 5px 2px;
-    }
-    .hero-name {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: clamp(36px, 6.5vw, 88px);
-      font-weight: 900;
-      line-height: 0.92;
-      text-transform: uppercase;
-      letter-spacing: -1px;
-      color: #fff;
     }
     .body-text {
       font-family: 'Barlow', sans-serif;
@@ -190,22 +242,6 @@
     }
     .link-cell:hover { color: #0000aa; }
 
-    /* ── PROJECT CARDS ── */
-    .proj-card {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 10px 8px;
-      cursor: pointer;
-      transition: filter 0.15s;
-      min-height: 200px;
-    }
-    .proj-card:hover { filter: brightness(0.87); }
-    .pnum   { font-family: 'Barlow', sans-serif; font-size: 10px; color: rgba(0,0,0,0.4); margin-bottom: 4px; }
-    .ptitle { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(13px, 1.6vw, 17px); font-weight: 900; text-transform: uppercase; line-height: 1.1; color: #000; }
-    .pcat   { font-family: 'Barlow', sans-serif; font-size: 10px; color: rgba(0,0,0,0.5); margin-top: 3px; }
-
     /* ── PLACEHOLDERS ── */
     .ph {
       width: 100%; height: 100%; min-height: 140px;
@@ -215,8 +251,37 @@
       font-family: 'Barlow', sans-serif;
       font-size: 10px; color: #aaa;
       text-transform: uppercase; letter-spacing: 1px;
+      /* wireframe X cross */
+      position: relative;
     }
-    .ph.dark { background: #1a1a1a; color: #444; }
+    /* X-mark wireframe like the screenshot */
+    .ph::before, .ph::after {
+      content: '';
+      position: absolute;
+      background: #ccc;
+      pointer-events: none;
+    }
+    .ph::before {
+      width: 1px; height: 100%;
+      top: 0; left: 50%;
+      transform: rotate(calc(atan2(100%, 100%)));
+      transform-origin: center;
+    }
+    .ph.dark { background: #f0f0f0; color: #bbb; }
+    .ph.dark::before, .ph.dark::after { background: #ccc; }
+
+    /* Better X using SVG-like approach */
+    .ph-x {
+      width: 100%; height: 100%; min-height: 160px;
+      background: #f8f8f8;
+      position: relative;
+      overflow: hidden;
+    }
+    .ph-x svg {
+      width: 100%; height: 100%;
+      position: absolute; top: 0; left: 0;
+    }
+
     .ph.vid  { background: #111; color: #444; cursor: pointer; }
     .ph.vid:hover { background: #181818; }
     .play-btn {
@@ -260,10 +325,7 @@
       transition: background 0.1s;
     }
     .tab:hover { background: #cacaca; }
-    .tab.active {
-      background: #fff; color: #000;
-      border-top: 2px solid #000;
-    }
+    .tab.active { background: #fff; color: #000; border-top: 2px solid #000; }
     #tab-project        { display: none; }
     #tab-project.active { display: block; }
 
@@ -276,8 +338,8 @@
     ::-webkit-scrollbar-track { background: #d0d0d0; }
     ::-webkit-scrollbar-thumb { background: #aaa; border: 2px solid #d0d0d0; }
 
-    @media (max-width: 600px) {
-      .hero-name { font-size: 28px; }
+    @media (max-width: 640px) {
+      .proj-info .p-title { font-size: 13px; }
       .tab { padding: 0 10px; font-size: 10px; }
     }
   </style>
@@ -298,70 +360,72 @@
 <div id="sheet-wrapper">
 <div id="sheet">
 
-  <!-- COLUMN HEADERS: A–H plain -->
+  <!-- COLUMN HEADERS: C I N D Y M A C — plain grey -->
   <div id="col-headers">
     <div class="row-num-spacer"></div>
-    <div class="col-header">A</div>
-    <div class="col-header">B</div>
     <div class="col-header">C</div>
+    <div class="col-header">I</div>
+    <div class="col-header">N</div>
     <div class="col-header">D</div>
-    <div class="col-header">E</div>
-    <div class="col-header">F</div>
-    <div class="col-header">G</div>
-    <div class="col-header">H</div>
+    <div class="col-header">Y</div>
+    <div class="col-header">M</div>
+    <div class="col-header">A</div>
+    <div class="col-header">C</div>
   </div>
 
   <!-- ═══════════ HOME ═══════════ -->
   <div id="sec-home" class="sheet-section visible">
 
+    <!-- Row 1: navigation -->
     <div class="row">
       <div class="row-num">1</div>
       <div class="cell"></div>
       <div class="cell link-cell" onclick="switchTab('work')">WORK</div>
       <div class="cell link-cell" onclick="switchTab('about')">ABOUT</div>
       <div class="cell link-cell" onclick="switchTab('contact')">CONTACT</div>
-      <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
     </div>
 
-    <div class="row"><div class="row-num">2</div><div class="cell s8"></div></div>
-
-    <!-- HERO: blue name + blue image area + role -->
-    <div class="row hero">
-      <div class="row-num">3</div>
-      <div class="cell s2" style="background:var(--blue);padding:0;display:flex;align-items:center;justify-content:center;">
-        <span class="hero-name" style="text-align:center;padding:16px;">CINDY<br>MAC</span>
-      </div>
-      <div class="cell s3" style="background:#1a36dd;padding:0;">
-        <div class="ph" style="background:#1a36dd;color:rgba(255,255,255,0.2);">[ HERO IMAGE ]</div>
-      </div>
-      <div class="cell s3" style="display:flex;flex-direction:column;justify-content:flex-end;padding:20px 16px;gap:12px;">
-        <div>
-          <div style="font-family:'Barlow',sans-serif;font-size:10px;color:#999;text-transform:uppercase;letter-spacing:2px;">Title</div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(16px,2.4vw,26px);font-weight:900;text-transform:uppercase;">Creative</div>
-        </div>
-        <div>
-          <div style="font-family:'Barlow',sans-serif;font-size:10px;color:#999;text-transform:uppercase;letter-spacing:2px;">Based in</div>
-          <div style="font-family:'Barlow',sans-serif;font-size:13px;">Copenhagen, Denmark</div>
-        </div>
-        <div style="font-family:'Barlow',sans-serif;font-size:11px;color:#555;display:flex;align-items:center;gap:6px;">
-          <span class="avail-dot"></span>Available for projects
-        </div>
-      </div>
-    </div>
-
-    <div class="row"><div class="row-num">9</div><div class="cell s8"></div></div>
-
+    <!-- Row 2: section label -->
     <div class="row">
-      <div class="row-num">10</div>
-      <div class="cell s8"><span class="section-label">Selected projects — click to explore</span></div>
+      <div class="row-num">2</div>
+      <div class="cell s8"><span class="section-label">Selected Work — Click to explore</span></div>
     </div>
 
-    <!-- 5 PROJECT CARDS -->
-    <div class="row xtall" id="home-cards"></div>
+    <!-- Row 3–10: Projects 01 + 02 (large) -->
+    <div class="row xtall">
+      <div class="row-num">3</div>
+      <div class="cell s4" style="padding:0;" id="home-p1"></div>
+      <div class="cell s4" style="padding:0;" id="home-p2"></div>
+    </div>
 
-    <div class="row"><div class="row-num">12</div><div class="cell s8" style="background:#f5f5f5;"></div></div>
-    <div class="row"><div class="row-num">13</div><div class="cell s8" style="background:#f0f0f0;"></div></div>
-    <div class="row"><div class="row-num">14</div><div class="cell s8" style="background:#ececec;"></div></div>
+    <!-- Row 11: separator -->
+    <div class="row">
+      <div class="row-num">11</div>
+      <div class="cell s8" style="background:#f5f5f5;"></div>
+    </div>
+
+    <!-- Row 12–19: Projects 03, 04, 05 (medium) -->
+    <div class="row mtall">
+      <div class="row-num">12</div>
+      <div class="cell s3" style="padding:0;" id="home-p3"></div>
+      <div class="cell s3" style="padding:0;" id="home-p4"></div>
+      <div class="cell s2" style="padding:0;" id="home-p5"></div>
+    </div>
+
+    <!-- Row 20: view all -->
+    <div class="row">
+      <div class="row-num">20</div>
+      <div class="cell s8" style="display:flex;align-items:center;padding:6px 10px;background:#f9f9f9;">
+        <span class="link-cell" onclick="switchTab('work')" style="font-size:11px;">View all work →</span>
+      </div>
+    </div>
+
+    <div class="row"><div class="row-num">21</div><div class="cell s8" style="background:#f0f0f0;"></div></div>
+    <div class="row"><div class="row-num">22</div><div class="cell s8" style="background:#ececec;"></div></div>
 
   </div><!-- /sec-home -->
 
@@ -562,9 +626,6 @@ const PROJECTS = [
   },
 ];
 
-/* purple needs white text; others are light enough for black */
-const lightText = id => [5].includes(id) ? '#fff' : '#000';
-
 const FORMULAE = {
   home:    '=CINDY_MAC("CREATIVE")',
   work:    '=FILTER(projects, category="ALL")',
@@ -573,6 +634,32 @@ const FORMULAE = {
 };
 
 const ALL_TABS = ['home','work','about','contact','project'];
+
+/* wireframe placeholder SVG (X cross like the screenshot) */
+function phSVG(label) {
+  return `
+    <div class="ph-x">
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100" height="100" fill="#f0f0f0"/>
+        <line x1="0" y1="0" x2="100" y2="100" stroke="#ccc" stroke-width="0.5" vector-effect="non-scaling-stroke"/>
+        <line x1="100" y1="0" x2="0" y2="100" stroke="#ccc" stroke-width="0.5" vector-effect="non-scaling-stroke"/>
+      </svg>
+    </div>`;
+}
+
+/* build a project card HTML for inside a cell */
+function projCardHTML(p) {
+  return `
+    <div class="proj-cell" onclick="openProject(${p.id})">
+      <div class="proj-img">${phSVG(p.num)}</div>
+      <div class="proj-info">
+        <div class="p-num">${p.num}</div>
+        <div class="p-title">${p.title}</div>
+        <div class="p-meta">${p.cat} · ${p.year}</div>
+        <span class="p-link">View Project →</span>
+      </div>
+    </div>`;
+}
 
 /* ── TAB SWITCHING ── */
 function switchTab(name) {
@@ -598,14 +685,17 @@ function openProject(id) {
   const p = PROJECTS.find(x => x.id === id);
   if (!p) return;
 
-  const tc = lightText(id);
+  const isDark = id === 5;
+  const tc = isDark ? '#fff' : '#000';
+  const metaColor = isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.4)';
+
   const tagsHtml = p.tags.map(t =>
     `<span class="status-chip" style="background:${p.color};color:${tc};">${t}</span>`
   ).join('');
 
   let imgHtml = '';
   for (let i = 1; i <= p.images; i++) {
-    imgHtml += `<div class="cell" style="padding:0;"><div class="ph dark" style="min-height:220px;">[ Image ${i} ]</div></div>`;
+    imgHtml += `<div class="cell" style="padding:0;">${phSVG('Image ' + i)}</div>`;
   }
 
   const videoHtml = p.video ? `
@@ -625,14 +715,14 @@ function openProject(id) {
   document.getElementById('project-content').innerHTML = `
     <div class="row">
       <div class="row-num">1</div>
-      <div class="cell link-cell" onclick="switchTab('work')">← All Projects</div>
+      <div class="cell link-cell" onclick="switchTab('work')" style="padding:4px 6px;">← All Projects</div>
       <div class="cell s7"><span class="section-label">${p.num} / ${p.cat.toUpperCase()} · ${p.year}</span></div>
     </div>
 
     <div class="row tall" style="min-height:160px;">
       <div class="row-num">2</div>
       <div class="cell s8" style="background:${p.color};display:flex;flex-direction:column;justify-content:center;padding:24px 28px;gap:12px;">
-        <div style="font-family:'Barlow',sans-serif;font-size:10px;color:${tc === '#fff' ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.4)'};letter-spacing:2px;text-transform:uppercase;">${p.year} · ${p.cat}</div>
+        <div style="font-family:'Barlow',sans-serif;font-size:10px;color:${metaColor};letter-spacing:2px;text-transform:uppercase;">${p.year} · ${p.cat}</div>
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(32px,5.5vw,72px);font-weight:900;text-transform:uppercase;line-height:0.93;letter-spacing:-2px;color:${tc};">${p.title}</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">${tagsHtml}</div>
       </div>
@@ -640,9 +730,7 @@ function openProject(id) {
 
     <div class="row" style="min-height:340px;">
       <div class="row-num">3</div>
-      <div class="cell s8" style="padding:0;">
-        <div class="ph dark" style="min-height:340px;">[ Primary Image ]</div>
-      </div>
+      <div class="cell s8" style="padding:0;">${phSVG('Primary Image')}</div>
     </div>
 
     <div class="row">
@@ -691,27 +779,12 @@ function openProject(id) {
 
 /* ── BUILD HOME CARDS ── */
 function buildHomeCards() {
-  const row = document.getElementById('home-cards');
-  row.innerHTML = '<div class="row-num">11</div>';
-  PROJECTS.forEach(p => {
-    const tc = lightText(p.id);
-    const cell = document.createElement('div');
-    cell.className = 'cell';
-    cell.style.cssText = `padding:0;background:${p.color};`;
-    cell.onclick = () => openProject(p.id);
-    cell.innerHTML = `
-      <div class="proj-card">
-        <div class="pnum" style="color:${tc === '#fff' ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)'};">${p.num}</div>
-        <div class="ptitle" style="color:${tc};">${p.title}</div>
-        <div class="pcat" style="color:${tc === '#fff' ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'};">${p.cat} · ${p.year}</div>
-      </div>`;
-    row.appendChild(cell);
+  [1, 2, 3, 4, 5].forEach(id => {
+    const el = document.getElementById('home-p' + id);
+    if (!el) return;
+    const p = PROJECTS.find(x => x.id === id);
+    el.innerHTML = projCardHTML(p);
   });
-  const last = document.createElement('div');
-  last.className = 'cell s3';
-  last.style.cssText = 'background:#f0f0f0;display:flex;align-items:flex-end;padding:12px;';
-  last.innerHTML = `<span class="link-cell" onclick="switchTab('work')" style="font-size:11px;">View all work →</span>`;
-  row.appendChild(last);
 }
 
 /* ── BUILD WORK LIST ── */
@@ -721,18 +794,19 @@ function buildWorkSection() {
   PROJECTS.forEach((p, i) => {
     const rn = 3 + i * 2;
     const flip = i % 2 === 1;
-    const tc = lightText(p.id);
+    const isDark = p.id === 5;
+    const tc = isDark ? '#fff' : '#000';
     const imgCell = `
-      <div class="cell s4" style="padding:0;background:${p.color};cursor:pointer;" onclick="openProject(${p.id})">
-        <div class="ph" style="background:${p.color};color:${tc === '#fff' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'};min-height:260px;">[ Image ${p.num} ]</div>
+      <div class="cell s4" style="padding:0;cursor:pointer;" onclick="openProject(${p.id})">
+        ${phSVG(p.num)}
       </div>`;
     const textCell = `
       <div class="cell s4" style="display:flex;flex-direction:column;justify-content:center;padding:22px 18px;gap:10px;cursor:pointer;" onclick="openProject(${p.id})">
         <div style="font-family:'Barlow',sans-serif;font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;">${p.num} / ${p.cat.toUpperCase()}</div>
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(22px,3.2vw,42px);font-weight:900;text-transform:uppercase;line-height:1;">${p.title}</div>
-        <div style="font-family:'Barlow',sans-serif;font-size:12px;color:#555;line-height:1.65;">${p.desc.substring(0, 90)}...</div>
+        <div style="font-family:'Barlow',sans-serif;font-size:12px;color:#555;line-height:1.65;">${p.desc.substring(0, 100)}...</div>
         <div style="font-family:'Barlow',sans-serif;font-size:10px;color:#999;">${p.year} · ${p.tags.join(' · ')}</div>
-        <span class="link-cell" style="font-size:11px;margin-top:2px;">View project →</span>
+        <span class="link-cell" style="font-size:11px;margin-top:2px;">View Project →</span>
       </div>`;
     html += `
       <div class="row" style="min-height:260px;">
@@ -757,10 +831,10 @@ document.addEventListener('click', e => {
   if (!row) return;
   const rn = row.querySelector('.row-num');
   const r = rn ? rn.textContent.trim() : '?';
-  const cols = 'ABCDEFGH';
+  const cols = 'CINDYMAC';
   const cells = Array.from(row.querySelectorAll(':scope > .cell'));
   const idx = cells.indexOf(cell);
-  const c = idx >= 0 ? (cols[idx] || 'A') : 'A';
+  const c = idx >= 0 ? (cols[idx] || 'C') : 'C';
   document.getElementById('name-box').value = c + r;
 });
 </script>
