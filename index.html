@@ -566,14 +566,69 @@
 </div>
 
 <script>
+/* ══════════════════════════════════════════════════════
+   HOW TO ADD IMAGES & VIDEO
+   ══════════════════════════════════════════════════════
+
+   IMAGES
+   ------
+   1. Create an "images/" folder next to index.html
+   2. Put your photos in it (jpg/png/webp)
+   3. Set  cover: "images/my-cover.jpg"
+      and  imgs:  ["images/img1.jpg", "images/img2.jpg", ...]
+
+   You can also use any public URL:
+      cover: "https://example.com/photo.jpg"
+
+   VIDEO
+   -----
+   Paste a YouTube or Vimeo URL directly — the site converts it:
+      videoUrl: "https://www.youtube.com/watch?v=XXXXXXXXXXX"
+      videoUrl: "https://vimeo.com/123456789"
+   Leave as "" if the project has no video.
+
+   ══════════════════════════════════════════════════════ */
+
 /* ── PROJECT DATA ── */
 const PROJECTS = [
-  { id:1, num:'01', title:'Project Alpha',   cat:'Brand Identity', year:'2024', tags:['Print','Digital','Guidelines'], color:'#f7e000', desc:'[Describe the idea behind Project Alpha. What was the brief? What was your approach and starting point? What do you want the viewer to feel? Keep it raw and direct.]', images:3, video:true  },
-  { id:2, num:'02', title:'Project Beta',    cat:'Campaign',       year:'2024', tags:['Social Media','OOH','360°'],   color:'#ff22aa', desc:'[Describe the idea behind Project Beta. What was the brief? What was your approach?]',   images:2, video:true  },
-  { id:3, num:'03', title:'Project Gamma',   cat:'Editorial',      year:'2023', tags:['Photography','Styling'],       color:'#ff6600', desc:'[Describe the idea behind Project Gamma. What was the brief? What was your approach?]',  images:4, video:false },
-  { id:4, num:'04', title:'Project Delta',   cat:'Motion',         year:'2023', tags:['Animation','Video'],           color:'#22ee55', desc:'[Describe the idea behind Project Delta. What was the brief? What was your approach?]',  images:2, video:true  },
-  { id:5, num:'05', title:'Project Epsilon', cat:'Installation',   year:'2022', tags:['Spatial Design','Exhibition'], color:'#9933ff', desc:'[Describe the idea behind Project Epsilon. What was the brief? What was your approach?]',images:3, video:false },
-  { id:6, num:'06', title:'Project Zeta',    cat:'Photography',    year:'2022', tags:['Studio','Editorial','Beauty'], color:'#ff3322', desc:'[Describe the idea behind Project Zeta. What was the brief? What was your approach?]',   images:3, video:true  },
+  {
+    id:1, num:'01', title:'Project Alpha', cat:'Brand Identity', year:'2024',
+    tags:['Print','Digital','Guidelines'], color:'#f7e000',
+    desc:'[Describe the idea behind Project Alpha. What was the brief? What was your approach and starting point? What do you want the viewer to feel? Keep it raw and direct.]',
+    cover: '',                                    // ← thumbnail on home card
+    imgs:  ['', '', ''],                          // ← gallery images on project page
+    videoUrl: '',                                 // ← YouTube or Vimeo URL
+  },
+  {
+    id:2, num:'02', title:'Project Beta', cat:'Campaign', year:'2024',
+    tags:['Social Media','OOH','360°'], color:'#ff22aa',
+    desc:'[Describe the idea behind Project Beta. What was the brief? What was your approach?]',
+    cover: '', imgs: ['', ''], videoUrl: '',
+  },
+  {
+    id:3, num:'03', title:'Project Gamma', cat:'Editorial', year:'2023',
+    tags:['Photography','Styling'], color:'#ff6600',
+    desc:'[Describe the idea behind Project Gamma. What was the brief? What was your approach?]',
+    cover: '', imgs: ['', '', '', ''], videoUrl: '',
+  },
+  {
+    id:4, num:'04', title:'Project Delta', cat:'Motion', year:'2023',
+    tags:['Animation','Video'], color:'#22ee55',
+    desc:'[Describe the idea behind Project Delta. What was the brief? What was your approach?]',
+    cover: '', imgs: ['', ''], videoUrl: '',
+  },
+  {
+    id:5, num:'05', title:'Project Epsilon', cat:'Installation', year:'2022',
+    tags:['Spatial Design','Exhibition'], color:'#9933ff',
+    desc:'[Describe the idea behind Project Epsilon. What was the brief? What was your approach?]',
+    cover: '', imgs: ['', '', ''], videoUrl: '',
+  },
+  {
+    id:6, num:'06', title:'Project Zeta', cat:'Photography', year:'2022',
+    tags:['Studio','Editorial','Beauty'], color:'#ff3322',
+    desc:'[Describe the idea behind Project Zeta. What was the brief? What was your approach?]',
+    cover: '', imgs: ['', '', ''], videoUrl: '',
+  },
 ];
 
 const FORMULAE = {
@@ -584,7 +639,7 @@ const FORMULAE = {
 };
 const ALL_TABS = ['home','work','about','contact','project'];
 
-/* X-wire SVG helper */
+/* X-wire SVG placeholder */
 function xwireHTML(minH) {
   const h = minH ? `style="min-height:${minH}px;"` : '';
   return `<div class="xwire" ${h}>
@@ -596,11 +651,28 @@ function xwireHTML(minH) {
   </div>`;
 }
 
+/* Real image OR wireframe fallback */
+function imgOrWire(src, minH) {
+  if (src) return `<img src="${src}" style="width:100%;height:100%;object-fit:cover;display:block;min-height:${minH||0}px;" alt="" />`;
+  return xwireHTML(minH);
+}
+
+/* Convert YouTube / Vimeo watch URL → embed URL */
+function toEmbedUrl(url) {
+  if (!url) return '';
+  const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/\s]+)/);
+  if (yt) return `https://www.youtube.com/embed/${yt[1]}`;
+  const vi = url.match(/vimeo\.com\/(\d+)/);
+  if (vi) return `https://player.vimeo.com/video/${vi[1]}`;
+  return url; // already an embed URL
+}
+
 /* project card for home grid */
 function homeCardHTML(p, landscape) {
+  const imgH = landscape ? 120 : 160;
   return `
     <div class="card-wrap clickable" onclick="openProject(${p.id})">
-      <div class="card-img">${xwireHTML(landscape ? 120 : 160)}</div>
+      <div class="card-img">${imgOrWire(p.cover, imgH)}</div>
       <div class="card-footer">
         <div class="p-num">${p.num}</div>
         <div class="p-title">${p.title}</div>
@@ -649,21 +721,28 @@ function openProject(id) {
     `<span class="status-chip" style="background:${p.color};color:${tc};">${t}</span>`
   ).join('');
 
+  /* gallery images */
   let imgHtml = '';
-  for (let i=1; i<=p.images; i++) {
+  (p.imgs || []).forEach(src => {
     imgHtml += `<div class="cell" style="padding:0;">
-      <div class="ph-dark" style="min-height:220px;">
-        <svg viewBox="0 0 100 100" preserveAspectRatio="none"><rect width="100" height="100" fill="#f5f5f5"/><line x1="0" y1="0" x2="100" y2="100" stroke="#c8c8c8" stroke-width="0.6" vector-effect="non-scaling-stroke"/><line x1="100" y1="0" x2="0" y2="100" stroke="#c8c8c8" stroke-width="0.6" vector-effect="non-scaling-stroke"/></svg>
+      <div class="ph-dark" style="min-height:220px;overflow:hidden;">
+        ${imgOrWire(src, 220)}
       </div>
     </div>`;
-  }
+  });
 
-  const videoHtml = p.video ? `
+  /* video */
+  const embedUrl = toEmbedUrl(p.videoUrl);
+  const videoHtml = embedUrl ? `
     <div class="row"><div class="row-num">7</div><div class="cell s8" style="background:#f5f5f5;"></div></div>
-    <div class="row" style="min-height:300px;">
+    <div class="row" style="min-height:320px;">
       <div class="row-num">8</div>
       <div class="cell" style="background:#f5f5f5;"></div>
-      <div class="cell s6" style="padding:0;"><div class="ph-vid"><div class="play-btn">▶</div><span>[ Video — paste YouTube / Vimeo URL ]</span></div></div>
+      <div class="cell s6" style="padding:0;">
+        <iframe src="${embedUrl}" style="width:100%;height:100%;min-height:320px;border:none;display:block;"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
       <div class="cell" style="background:#f5f5f5;"></div>
     </div>` : '';
 
@@ -685,9 +764,9 @@ function openProject(id) {
 
     <div class="row" style="min-height:340px;">
       <div class="row-num">3</div>
-      <div class="cell s8" style="padding:0;">
-        <div class="ph-dark" style="min-height:340px;">
-          <svg viewBox="0 0 100 100" preserveAspectRatio="none"><rect width="100" height="100" fill="#f5f5f5"/><line x1="0" y1="0" x2="100" y2="100" stroke="#c8c8c8" stroke-width="0.6" vector-effect="non-scaling-stroke"/><line x1="100" y1="0" x2="0" y2="100" stroke="#c8c8c8" stroke-width="0.6" vector-effect="non-scaling-stroke"/></svg>
+      <div class="cell s8" style="padding:0;overflow:hidden;">
+        <div class="ph-dark" style="min-height:340px;overflow:hidden;">
+          ${imgOrWire(p.cover || (p.imgs && p.imgs[0]), 340)}
         </div>
       </div>
     </div>
